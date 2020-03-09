@@ -5,7 +5,7 @@ import Recipient from '../models/Recipient';
 
 class RecipientController {
   async index(req, res) {
-    const { q = "" } = req.query;
+    const { q = '' } = req.query;
 
     const recipients = await Recipient.findAll({
       where: {
@@ -33,7 +33,7 @@ class RecipientController {
   }
 
   async store(req, res) {
-    console.log(req.body)
+    console.log(req.body);
     const schema = Yup.object().shape({
       name: Yup.string().required(),
       street: Yup.string().required(),
@@ -66,7 +66,16 @@ class RecipientController {
       zipcode,
     } = await Recipient.create(req.body);
 
-    return res.json({ id, name, street, number, complement, state, city, zipcode });
+    return res.json({
+      id,
+      name,
+      street,
+      number,
+      complement,
+      state,
+      city,
+      zipcode,
+    });
   }
 
   async update(req, res) {
@@ -101,7 +110,16 @@ class RecipientController {
       zipcode,
     } = await recipient.update(req.body);
 
-    return res.json({ id, name, street, number, complement, state, city, zipcode });
+    return res.json({
+      id,
+      name,
+      street,
+      number,
+      complement,
+      state,
+      city,
+      zipcode,
+    });
   }
 }
 

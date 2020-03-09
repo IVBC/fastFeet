@@ -44,7 +44,7 @@ class SessionController {
 
     const { id, name } = user;
 
-    console.log(authConfig)
+    console.log(authConfig);
     return res.json({
       user: {
         id,
