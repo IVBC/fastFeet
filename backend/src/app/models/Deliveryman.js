@@ -11,6 +11,7 @@ class Deliveryman extends Model {
         sequelize,
         freezeTableName: true,
         tableName: 'delivery_people',
+        paranoid: true,
       }
     );
     return this;
