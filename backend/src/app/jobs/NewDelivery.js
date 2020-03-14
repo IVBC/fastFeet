@@ -13,7 +13,7 @@ class NewDelivery {
       subject: 'Nova entrega disponível.',
       template: 'newDelivery',
       context: {
-        delivery: deliverymanExists.name,
+        deliveryman: deliverymanExists.name,
         product,
         recipient: recipientExists.name,
       },

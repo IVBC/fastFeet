@@ -13,8 +13,8 @@ class CancellationDelivery {
       subject: 'Entrega cancelada.',
       template: 'cancellationDelivery',
       context: {
-        delivery: name,
-        product: deliveryProblem.Order.product,
+        deliveryman: name,
+        product: deliveryProblem.delivery.product,
         description: deliveryProblem.description,
       },
     });

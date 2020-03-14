@@ -7,6 +7,7 @@ import SessionsController from './app/controllers/SessionController';
 import RecipientController from './app/controllers/RecipientController';
 import DeliverymanController from './app/controllers/DeliverymanController';
 import DeliveryController from './app/controllers/DeliveryController';
+import DeliveryProblemsController from './app/controllers/DeliveryProblemsController';
 import DeliverymanFeaturesController from './app/controllers/DeliverymanFeaturesController';
 import FileController from './app/controllers/FileController';
 
@@ -27,6 +28,17 @@ routes.post(
 
 routes.get('/delivery/:id/deliveries', DeliverymanFeaturesController.index);
 routes.put('/delivery/:id', DeliverymanFeaturesController.update);
+
+/**
+ * Delivery Problems
+ */
+routes.post('/delivery/:id/problems', DeliveryProblemsController.store);
+routes.get('/delivery/problems', DeliveryProblemsController.index);
+routes.get('/delivery/:id/problems', DeliveryProblemsController.show);
+routes.delete(
+  '/delivery/:id/cancel-delivery',
+  DeliveryProblemsController.delete
+);
 
 routes.post('/sessions', SessionsController.store);
 

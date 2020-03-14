@@ -10,8 +10,8 @@ class Delivery extends Model {
       },
       {
         sequelize,
-        deletedAt: 'canceled_at',
         paranoid: true,
+        deletedAt: 'canceled_at',
       }
     );
     return this;
