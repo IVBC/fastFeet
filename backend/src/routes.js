@@ -7,6 +7,7 @@ import SessionsController from './app/controllers/SessionController';
 import RecipientController from './app/controllers/RecipientController';
 import DeliverymanController from './app/controllers/DeliverymanController';
 import DeliveryController from './app/controllers/DeliveryController';
+import DeliverymanFeaturesController from './app/controllers/DeliverymanFeaturesController';
 import FileController from './app/controllers/FileController';
 
 import authMiddleware from './app/middlewares/auth';
@@ -19,6 +20,13 @@ routes.post(
   upload.single('file'),
   FileController.store
 );
+
+/**
+ * Deliveryman features
+ */
+
+routes.get('/delivery/:id/deliveries', DeliverymanFeaturesController.index);
+routes.put('/delivery/:id', DeliverymanFeaturesController.update);
 
 routes.post('/sessions', SessionsController.store);
 

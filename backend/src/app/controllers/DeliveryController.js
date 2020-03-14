@@ -6,8 +6,8 @@ import Deliveryman from '../models/Deliveryman';
 import Delivery from '../models/Delivery';
 import File from '../models/File';
 
-// import NewDelivery from '../jobs/NewOrder';
-// import Queue from '../../lib/Queue';
+import NewDelivery from '../jobs/NewDelivery';
+import Queue from '../../lib/Queue';
 
 class DeliveryController {
   async index(req, res) {
@@ -89,11 +89,11 @@ class DeliveryController {
 
     const { id, product } = await Delivery.create(req.body);
 
-    // await Queue.add(NewOrder.key, {
-    //   deliverytExists,
-    //   product,
-    //   recipientExists,
-    // });
+    await Queue.add(NewDelivery.key, {
+      deliverymanExists,
+      product,
+      recipientExists,
+    });
 
     return res.json({
       id,
@@ -120,6 +120,12 @@ class DeliveryController {
 
     if (!delivery) {
       return res.status(400).json({ error: 'Delivery not found' });
+    }
+
+    const { end_date } = delivery;
+
+    if (end_date) {
+      return res.status(400).json({ error: 'Delivery already completed' });
     }
 
     const { recipient_id, deliveryman_id } = req.body;
