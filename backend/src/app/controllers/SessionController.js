@@ -16,11 +16,19 @@ class SessionController {
         .required('Must enter password'),
     });
 
-    const x = await schema.validate(req.body).catch(e => {
-      return res.status(400).json({ error: e.name, errors: e.errors });
-    });
+    try {
+      await schema.validate(req.body, { abortEarly: false });
+    } catch (err) {
+      if (err instanceof Yup.ValidationError) {
+        const errorMessages = {};
 
-    console.log(x);
+        err.inner.forEach(error => {
+          errorMessages[error.path] = error.message;
+        });
+
+        return res.status(400).json(errorMessages);
+      }
+    }
 
     if (!(await schema.isValid(req.body))) {
       return res.status(401).json({ error: 'Validate fails.' });
@@ -44,7 +52,6 @@ class SessionController {
 
     const { id, name } = user;
 
-    console.log(authConfig);
     return res.json({
       user: {
         id,
