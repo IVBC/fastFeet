@@ -61,12 +61,17 @@ export const FirstItem = styled.div`
 
 export const LastItem = styled.span`
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   margin-bottom: 21px;
   background: #fff;
   height: 57px;
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
+  > span {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
 `;
 
 export const Badge = styled.button`
@@ -96,7 +101,7 @@ export const OptionsList = styled.span`
   position: absolute;
   z-index: 100;
   width: 150px;
-  left: calc(50% - 73px);
+  /* left: calc(50% - 73px); */
   top: 100%;
   background: #fff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
@@ -108,7 +113,7 @@ export const OptionsList = styled.span`
   &::before {
     content: '▲';
     position: absolute;
-    left: 71px;
+    left: 102px;
     top: -13px;
     width: 0;
     height: 0;
