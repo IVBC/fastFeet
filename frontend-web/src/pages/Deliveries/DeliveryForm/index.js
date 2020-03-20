@@ -83,7 +83,7 @@ export default function OrderForm() {
       },
     });
 
-    const data = response.data.map(deliveryman => ({
+    const data = response.data.deliverers.map(deliveryman => ({
       value: deliveryman.id,
       label: deliveryman.name,
     }));

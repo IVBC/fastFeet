@@ -2,8 +2,10 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   display: flex;
-  margin: 34px 120px;
+  /* margin: 34px 120px; */
   flex-direction: column;
+  /* justify-content: center; */
+  padding: 20px;
 `;
 
 export const InitialContent = styled.div`
@@ -82,24 +84,40 @@ export const DeliveryListTable = styled.table`
       min-width: 45px;
     }
     :last-child {
-      width: 13%;
+      width: 7%;
       /* text-align: center; */
       min-width: 45px;
     }
     :nth-child(2) {
-      width: 36%;
+      width: 25%;
     }
     :nth-child(3) {
-      width: 15%;
+      width: 20%;
     }
     :nth-child(4) {
-      width: 10%;
+      width: 13%;
     }
     :nth-child(5) {
-      width: 10%;
+      width: 9%;
     }
     :nth-child(6) {
       width: 10%;
+    }
+    :nth-child(7) {
+      width: 10%;
+    }
+  }
+
+  // Large devices (desktops, 992px and up)
+  @media (max-width: 1199.98px) {
+    tbody td,
+    thead th {
+      :nth-child(3) {
+        width: 33%;
+      }
+      :nth-child(4) {
+        display: none;
+      }
     }
   }
 `;

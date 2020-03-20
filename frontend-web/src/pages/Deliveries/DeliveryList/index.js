@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import ReactLoading from 'react-loading';
+// import ReactLoading from 'react-loading';
+import { toast } from 'react-toastify';
+import LoadingLine from '~/components/LoadingLine';
+
 import api from '~/services/api';
 import history from '~/services/history';
 
@@ -19,40 +22,53 @@ import DeliveryItem from './DeliveryItemTable';
 export default function DeliveryList() {
   const [deliveries, setDeliveries] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(2);
   const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     async function loadDeliveries() {
-      const response = await api.get('deliveries');
-      const { data } = response;
-      setLoading(false);
-      setDeliveries(data);
+      try {
+        setLoading(true);
+        const response = await api.get('deliveries');
+        const {
+          data: { deliveries: _deliveries },
+        } = response;
+        setDeliveries(_deliveries);
+        // setTimeout(() => {
+        //   setDeliveries(_deliveries);
+        //   setLoading(false);
+        // }, 3000);
+      } catch (err) {
+        toast.error('Não foi possível carregar as entregas.');
+      } finally {
+        setLoading(false);
+      }
     }
-    setLoading(true);
+
     loadDeliveries();
   }, []);
 
   async function fetchMoreData() {
     if (loading) return;
 
-    if (deliveries.length >= 12) {
-      setHasMore(false);
-      return;
-    }
-
-    setLoading(true);
+    // setLoading(true);
 
     const response = await api.get('/deliveries', {
       params: {
         page,
       },
     });
-    const { data } = response;
+    const {
+      data: { deliveries: _deliveries, count },
+    } = response;
 
-    setDeliveries([...deliveries, ...data]);
+    setDeliveries([...deliveries, ..._deliveries]);
+
     setPage(page + 1);
-    setLoading(false);
+    // setLoading(false);
+    if (deliveries.length >= count) {
+      setHasMore(false);
+    }
   }
 
   async function updateDeliveries() {
@@ -88,7 +104,7 @@ export default function DeliveryList() {
             // </div>
             <p style={{ textAlign: 'center' }}>
               <b>...</b>
-              <ReactLoading type="balls" />
+              {/* <ReactLoading type="balls" /> */}
             </p>
           }
           scrollableTarget="scrollableDiv"
@@ -103,6 +119,7 @@ export default function DeliveryList() {
               <TableHead>
                 <th>ID</th>
                 <th>Destinatário</th>
+                <th>Encomenda</th>
                 <th>Entregador</th>
                 <th>Cidade</th>
                 <th>Estado</th>
@@ -111,13 +128,42 @@ export default function DeliveryList() {
               </TableHead>
             </thead>
             <tbody id="scrollableDiv" style={{ overflow: 'auto' }}>
-              {deliveries.map(delivery => (
-                <DeliveryItem
-                  key={delivery.id}
-                  delivery={delivery}
-                  updateDeliveries={updateDeliveries}
-                />
-              ))}
+              {loading ? (
+                <tr>
+                  <td>
+                    <LoadingLine />
+                  </td>
+                  <td>
+                    <LoadingLine />
+                  </td>
+                  <td>
+                    <LoadingLine />
+                  </td>
+                  <td>
+                    <LoadingLine />
+                  </td>
+                  <td>
+                    <LoadingLine />
+                  </td>
+                  <td>
+                    <LoadingLine />
+                  </td>
+                  <td>
+                    <LoadingLine />
+                  </td>
+                  <td>
+                    <LoadingLine />
+                  </td>
+                </tr>
+              ) : (
+                deliveries.map(delivery => (
+                  <DeliveryItem
+                    key={delivery.id}
+                    delivery={delivery}
+                    updateDeliveries={updateDeliveries}
+                  />
+                ))
+              )}
             </tbody>
           </DeliveryListTable>
           {null}

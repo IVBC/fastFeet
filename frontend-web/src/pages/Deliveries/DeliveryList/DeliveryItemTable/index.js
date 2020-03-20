@@ -114,6 +114,11 @@ export default function OrderItem({ delivery, updateDeliveries }) {
       </td>
       <td>
         <div>
+          <p>{delivery.product}</p>
+        </div>
+      </td>
+      <td>
+        <div>
           {delivery.deliveryman.avatar ? (
             <img
               src={delivery.deliveryman.avatar.url}
