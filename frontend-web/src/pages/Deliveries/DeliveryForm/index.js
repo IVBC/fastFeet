@@ -68,7 +68,7 @@ export default function OrderForm() {
       },
     });
 
-    const data = response.data.map(recipient => ({
+    const data = response.data.recipients.map(recipient => ({
       value: recipient.id,
       label: recipient.name,
     }));
