@@ -22,52 +22,36 @@ function List() {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
 
-  // Selection for delivery type
-  const [delivered, setDelivered] = useState(false);
-  // const { deliveredDeliveries, deliveredLoading } = useSelector(
-  //   (state) => state.deliveries
-  // );
-  const loadDeliveries = useCallback(async () => {
-    if (loading) {
-      return;
-    }
+    // Selection for delivery type
+    const [delivered, setDelivered] = useState(false);
+    // const { deliveredDeliveries, deliveredLoading } = useSelector(
+    //   (state) => state.deliveries
+    // );
+  
+      useEffect(() => {
+        async function loadDeliveries() {
+            try {
+                // Setting the loading to true before the start of the request
+                setLoading(true);
+                const response = await api.get(`/deliverer/${id}/deliveries`, {
+                    params: { page },
+                });
+                const {
+                    data: { deliveries: newDeliveries },
+                } = response;
 
-    if (total > 0 && deliveries.length === total) {
-      return;
-    }
+                setDeliveries([...deliveries, ...newDeliveries]);
+            } catch (e) {
+                console.tron.log(e);
+            } finally {
+                // Setting the loading to true after an successfully response or a error
+                setLoading(false);
+            }
+        }
 
-    setLoading(true);
-
-    try {
-      const response = await api.get(`/deliverer/${id}/deliveries`, {
-        params: { page },
-      });
-      console.tron.log(response);
-      const {
-        data: { deliveries: _deliveries, count },
-      } = response;
-      console.log('response ', _deliveries);
-
-      setDeliveries([...deliveries, ..._deliveries]);
-      setTotal(count);
-      setPage(page + 1);
-    } catch (e) {
-      Alert.alert(
-        'Não foi possível carregar suas entregas !',
-        'Falha na comuniçao com o servidor. Por favor, tente novamente...'
-      );
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    loadDeliveries();
-  }, [loadDeliveries]);
-
-  useEffect(() => {
-    console.log('resposta: ', deliveries.length, total);
-  }, [deliveries, total]);
+        loadDeliveries();
+        // eslint-disable-next-line
+    }, []);
 
   // const navigateToDetail = useCallback(
   //   (delivery) => navigate('Delivery', { delivery }),
