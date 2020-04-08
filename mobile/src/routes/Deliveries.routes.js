@@ -24,6 +24,7 @@ export default function DeliveryRoutes() {
         headerTitleAlign: 'center',
         headerTitleStyle: {
           fontWeight: 'bold',
+          fontSize: 18,
         },
         headerTintColor: colors.bg,
         headerTransparent: true,
