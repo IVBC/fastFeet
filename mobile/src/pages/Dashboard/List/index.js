@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback, useState, useMemo, memo } from 'react';
-import PropTypes, { func } from 'prop-types';
+
 import { useSelector } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 import { Alert } from 'react-native';
 import api from '~/services/api';
 
@@ -12,10 +12,8 @@ import Header from './Header';
 import { FlatList } from './styles';
 
 function List() {
-  const { navigate } = useNavigation();
-  console.log('LIST');
-
   const { id } = useSelector((state) => state.auth);
+  const isFocused = useIsFocused();
 
   const [deliveries, setDeliveries] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -23,11 +21,12 @@ function List() {
   const [total, setTotal] = useState(0);
 
   // Selection for delivery type
-  const [delivered, setDelivered] = useState(false);
+  const [typeDelivered, setTypeDelivered] = useState(false);
   // const { deliveredDeliveries, deliveredLoading } = useSelector(
   //   (state) => state.deliveries
   // );
-  const loadDeliveries = useCallback(async () => {
+
+  const loadDeliveries = async () => {
     if (loading) {
       return;
     }
@@ -39,14 +38,19 @@ function List() {
     setLoading(true);
 
     try {
-      const response = await api.get(`/deliverer/${id}/deliveries`, {
-        params: { page },
+      // console.log('loadDeliveries', typeDelivered, page);
+      console.log({
+        params: { page, filter: typeDelivered ? 'DELIVERED' : 'OPEN' },
       });
-      console.tron.log(response);
+      const response = await api.get(`/deliverer/${id}/deliveries`, {
+        params: { page, filter: typeDelivered ? 'DELIVERED' : 'OPEN' },
+      });
+
       const {
         data: { deliveries: _deliveries, count },
       } = response;
-      console.log('response ', _deliveries);
+
+      console.log(_deliveries);
 
       setDeliveries([...deliveries, ..._deliveries]);
       setTotal(count);
@@ -59,26 +63,43 @@ function List() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
+
+  useEffect(() => {
+    // console.log('Mudando o type: ', typeDelivered);
+    if (isFocused) {
+      setDeliveries([]);
+      setPage(1);
+      setTotal(0);
+    }
+
+    // }
+  }, [typeDelivered, isFocused]);
 
   useEffect(() => {
     loadDeliveries();
-  }, [loadDeliveries]);
+  }, []);
 
   useEffect(() => {
-    console.log('resposta: ', deliveries.length, total);
-  }, [deliveries, total]);
+    if (page === 1) {
+      loadDeliveries();
+    }
+  }, [page]);
+
+  // useEffect(() => {
+  //   console.log('entrou aqui: ', isFocused);
+  //   if (isFocused) {
+  //     setTypeDelivered(!!typeDelivered);
+  //   }
+  // }, [isFocused]);
+
+  // useEffect(() => {
+  //   console.log('resposta: ', deliveries.length, total);
+  // }, [deliveries, total]);
 
   // const navigateToDetail = useCallback(
   //   (delivery) => navigate('Delivery', { delivery }),
   //   [navigate]
-  // );
-
-  // const renderItem = ({ delivery }) => (
-  //   <DeliveryCard
-  //     delivery={delivery}
-  //     navigateToDetail={() => navigateToDetail(delivery)}
-  //   />
   // );
 
   // const loadMoreDeliveredDeliveries = useCallback(() => {
@@ -99,12 +120,12 @@ function List() {
   //   [delivered, loadMoreDeliveredDeliveries, loadMoreDeliveries]
   // );
 
-  // const moreLoading = useMemo(() => {
-  //   if (loading) {
-  //     return <Loading />;
-  //   }
-  //   return null;
-  // }, [loading]);
+  const moreLoading = useMemo(() => {
+    if (loading) {
+      return <Loading />;
+    }
+    return null;
+  }, [loading]);
 
   // const onRefresh = useCallback(() => loadDeliveries, [loadDeliveries]);
 
@@ -114,16 +135,21 @@ function List() {
 
   return (
     <>
-      <Header delivered={delivered} setDelivered={setDelivered} />
-      {/* <FlatList
+      <Header
+        typeDelivered={typeDelivered}
+        setTypeDelivered={setTypeDelivered}
+      />
+      <FlatList
         data={deliveries}
-        renderItem={renderItem}
-        keyExtractor={(delivery) => String(delivery || 2)}
+        keyExtractor={(delivery) => String(delivery.id)}
         onEndReached={loadDeliveries}
-        // ListFooterComponent={moreLoading}
-        refreshing={refreshing}
-        onRefresh={onRefresh}
-      /> */}
+        ListFooterComponent={moreLoading}
+        // refreshing={loading}
+        // onRefresh={onRefresh}
+        renderItem={({ item: delivery }) => (
+          <DeliveryCard delivery={delivery} />
+        )}
+      />
     </>
   );
 }

@@ -1,5 +1,7 @@
-import React, { memo } from 'react';
+import React, { memo, useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { useNavigation } from '@react-navigation/native';
+import { format, parseISO } from 'date-fns';
 
 import Progress from '~/components/ProgressSteps';
 
@@ -18,28 +20,40 @@ import {
   FooterButtonTitle,
 } from './styles';
 
-const DeliveryCard = ({ delivery, navigateToDetail }) => {
-  console.log(delivery);
+const DeliveryCard = ({ delivery }) => {
+  const { navigate } = useNavigation();
+
+  const navigateToDetail = useCallback(
+    () => navigate('Delivery', { delivery }),
+    [navigate, delivery]
+  );
+
+  const dateParsed = useMemo(() => {
+    return format(parseISO(delivery.created_at), 'MM/dd/yyyy');
+  }, [delivery.created_at]);
+
   return (
     <Container>
       <Content>
         <TitleContainer>
           <TitleIcon />
-          <TitleText>Entrega {delivery.id}</TitleText>
+          <TitleText>
+            Entrega {delivery.id < 10 ? `0${delivery.id}` : delivery.id}
+          </TitleText>
         </TitleContainer>
         <Progress status={delivery.status} />
       </Content>
       <Footer>
         <FooterContentData>
           <FooterLabel>Data</FooterLabel>
-          <FooterInfo>{delivery.createdAt}</FooterInfo>
+          <FooterInfo>{dateParsed}</FooterInfo>
         </FooterContentData>
-        <FooterContent style={{ flexWrap: 'nowrap' }}>
+        <FooterContent>
           <FooterLabel>Cidade</FooterLabel>
-          <FooterInfo>{delivery.Recipient.city}</FooterInfo>
+          <FooterInfo>{delivery.recipient.city}</FooterInfo>
         </FooterContent>
         <FooterButton onPress={navigateToDetail}>
-          <FooterContent style={{ flexShrink: 1 }}>
+          <FooterContent>
             <FooterButtonTitle>Ver detalhes</FooterButtonTitle>
           </FooterContent>
         </FooterButton>
@@ -50,14 +64,12 @@ const DeliveryCard = ({ delivery, navigateToDetail }) => {
 
 DeliveryCard.propTypes = {
   delivery: PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    id: PropTypes.number.isRequired,
     product: PropTypes.string.isRequired,
     status: PropTypes.string,
-    createdAt: PropTypes.string.isRequired,
-    Recipient: PropTypes.shape({ city: PropTypes.string }),
+    created_at: PropTypes.string.isRequired,
+    recipient: PropTypes.shape({ city: PropTypes.string }),
   }).isRequired,
-
-  navigateToDetail: PropTypes.func.isRequired,
 };
 
 export default memo(DeliveryCard);

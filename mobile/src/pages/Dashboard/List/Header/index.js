@@ -3,24 +3,24 @@ import Proptypes from 'prop-types';
 
 import { Container, Title, Content, Button, ButtonText } from './styles';
 
-const Header = ({ delivered, setDelivered }) => {
+const Header = ({ typeDelivered, setTypeDelivered }) => {
   const handleDelivered = useCallback(() => {
-    setDelivered(true);
-  }, [setDelivered]);
+    setTypeDelivered(true);
+  }, [setTypeDelivered]);
 
   const handlePending = useCallback(() => {
-    setDelivered(false);
-  }, [setDelivered]);
+    setTypeDelivered(false);
+  }, [setTypeDelivered]);
 
   return (
     <Container>
       <Title>Entregas</Title>
       <Content>
         <Button onPress={handlePending}>
-          <ButtonText selected={!delivered}>Pendentes</ButtonText>
+          <ButtonText selected={!typeDelivered}>Pendentes</ButtonText>
         </Button>
         <Button onPress={handleDelivered}>
-          <ButtonText selected={delivered}>Entregues</ButtonText>
+          <ButtonText selected={typeDelivered}>Entregues</ButtonText>
         </Button>
       </Content>
     </Container>
@@ -28,8 +28,8 @@ const Header = ({ delivered, setDelivered }) => {
 };
 
 Header.propTypes = {
-  delivered: Proptypes.bool.isRequired,
-  setDelivered: Proptypes.func.isRequired,
+  typeDelivered: Proptypes.bool.isRequired,
+  setTypeDelivered: Proptypes.func.isRequired,
 };
 
 export default memo(Header);
