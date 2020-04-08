@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 
 import { Container, Activity } from './styles';
 
-export default function Loading({ size, background }) {
+export default function Loading({ size, background, padding }) {
   return (
-    <Container size={size} background={background}>
-      <Activity />
+    <Container background={background} padding={padding}>
+      <Activity size={size} />
     </Container>
   );
 }
@@ -14,9 +14,11 @@ export default function Loading({ size, background }) {
 Loading.propTypes = {
   size: PropTypes.string,
   background: PropTypes.string,
+  padding: PropTypes.number,
 };
 
 Loading.defaultProps = {
-  size: 'large',
+  size: 'small',
   background: null,
+  padding: null,
 };

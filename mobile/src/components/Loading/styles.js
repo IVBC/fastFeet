@@ -10,4 +10,5 @@ export const Container = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
+  padding: ${({ padding }) => (padding ? `${padding}px` : '0px')};
 `;

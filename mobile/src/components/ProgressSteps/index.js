@@ -18,15 +18,15 @@ const DeliveryProgress = ({ status }) => {
       <ProgressContainer>
         <Ball
           marked={
-            status === 'PENDENTE' ||
-            status === 'RETIRADA' ||
-            status === 'ENTREGUE'
+            status === 'PENDING' ||
+            status === 'WITHDRAWN' ||
+            status === 'DELIVERED'
           }
         />
         <Line />
-        <Ball marked={status === 'ENTREGUE' || status === 'RETIRADA'} />
+        <Ball marked={status === 'DELIVERED' || status === 'WITHDRAWN'} />
         <Line />
-        <Ball marked={status === 'ENTREGUE'} />
+        <Ball marked={status === 'DELIVERED'} />
       </ProgressContainer>
       <Descriptions>
         <View>

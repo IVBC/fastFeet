@@ -9,6 +9,7 @@ function AsyncImage({ style, source, name, size }) {
   console.log(source);
   const [loaded, setLoaded] = useState(false);
   function onLoad() {
+    console.log('carregado');
     if (source !== null) {
       setLoaded(true);
     }
