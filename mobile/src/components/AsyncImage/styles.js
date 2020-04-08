@@ -5,8 +5,8 @@ export const Container = styled.View`
 `;
 
 export const Image = styled.Image`
-  height: 70px;
-  width: 70px;
-  border-radius: 35px;
+  height: ${(props) => `${props.size}px`};
+  width: ${(props) => `${props.size}px`};
+  border-radius: ${(props) => `${props.size / 2}px`};
   margin-right: 20px;
 `;

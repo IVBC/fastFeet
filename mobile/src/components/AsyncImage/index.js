@@ -17,21 +17,24 @@ function AsyncImage({ style, source, name, size }) {
 
   return (
     <Container style={style}>
-      <Image
-        source={{ uri: source }}
-        resizeMode="contain"
-        style={[
-          style,
-          {
-            // position: 'absolute',
-            resizeMode: 'contain',
-            display: !loaded ? 'none' : 'flex',
-          },
-        ]}
-        onLoad={onLoad}
-      />
+      {source && (
+        <Image
+          source={{ uri: source }}
+          resizeMode="contain"
+          size={size}
+          style={[
+            style,
+            {
+              // position: 'absolute',
+              resizeMode: 'contain',
+              display: !loaded ? 'none' : 'flex',
+            },
+          ]}
+          onLoad={onLoad}
+        />
+      )}
 
-      {!loaded && <DefaultAvatar name={name} size={size} />}
+      {(!source || !loaded) && <DefaultAvatar name={name} size={size} />}
     </Container>
   );
 }

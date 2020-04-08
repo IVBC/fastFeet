@@ -13,11 +13,11 @@ export const Container = styled.SafeAreaView`
 
 export const Background = styled.View`
   background: ${colors.primary};
-  height: ${`${heightDevice * 0.25}px`};
+  height: ${`${heightDevice * 0.2}px`};
 `;
 
 export const Content = styled.View`
-  margin-top: ${`${heightDevice * 0.25 * -1 + 60}px`};
+  margin-top: ${`${heightDevice * 0.21 * -1 + 60}px`};
   /* margin-bottom: 170px; */
   flex: 1;
 `;
