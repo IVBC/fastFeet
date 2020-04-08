@@ -25,9 +25,9 @@ routes.post(
 /**
  * Deliveryman features
  */
-
-routes.get('/delivery/:id/deliveries', DeliverymanFeaturesController.index);
-routes.put('/delivery/:id', DeliverymanFeaturesController.update);
+routes.get('/deliverers/:id', DeliverymanController.show);
+routes.get('/deliverer/:id/deliveries', DeliverymanFeaturesController.index);
+routes.put('/delivery/:id/:action', DeliverymanFeaturesController.update);
 
 /**
  * Delivery Problems
@@ -48,16 +48,17 @@ routes.use(authMiddleware);
  * Recipients
  */
 routes.get('/recipients', RecipientController.index);
+routes.get('/recipients/:id', RecipientController.show);
 routes.post('/recipients', RecipientController.store);
 routes.put('/recipients/:id', RecipientController.update);
 
 /**
  * DeliveryPeople
  */
-routes.get('/deliveryPeople', DeliverymanController.index);
-routes.post('/deliveryPeople', DeliverymanController.store);
-routes.put('/deliveryPeople/:id', DeliverymanController.update);
-routes.delete('/deliveryPeople/:id', DeliverymanController.delete);
+routes.get('/deliverers', DeliverymanController.index);
+routes.post('/deliverers', DeliverymanController.store);
+routes.put('/deliverers/:id', DeliverymanController.update);
+routes.delete('/deliverers/:id', DeliverymanController.delete);
 
 /**
  * File
@@ -69,6 +70,7 @@ routes.post('/files', upload.single('file'), FileController.store);
  */
 
 routes.get('/deliveries', DeliveryController.index);
+routes.get('/deliveries/:id', DeliveryController.show);
 routes.post('/deliveries', DeliveryController.store);
 routes.put('/deliveries/:id', DeliveryController.update);
 routes.delete('/deliveries/:id', DeliveryController.delete);

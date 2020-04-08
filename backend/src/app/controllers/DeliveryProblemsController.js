@@ -8,15 +8,23 @@ import Queue from '../../lib/Queue';
 
 class DeliveryProblemsController {
   async index(req, res) {
-    const deliveryProblems = await DeliveryProblem.findAll();
-
+    const { page = 1, quantity = 10 } = req.query;
+    const { rows: problems, count } = await DeliveryProblem.findAndCountAll({
+      order: [['id', 'DESC']],
+      limit: quantity,
+      offset: (page - 1) * quantity,
+    });
     // fazer paginacao ?
 
     // if (!deliveryProblems) {
     //   return res.status(400).json({ error: 'Delivery problems not found.' });
     // }
 
-    return res.json(deliveryProblems);
+    return res.json({
+      problems,
+      count,
+      totalPages: Math.ceil(count / quantity),
+    });
   }
 
   async show(req, res) {

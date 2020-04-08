@@ -11,17 +11,73 @@ import Queue from '../../lib/Queue';
 
 class DeliveryController {
   async index(req, res) {
-    const { page = 1, q = '' } = req.query;
+    const { page = 1, q = '', quantity = 10 } = req.query;
 
-    const deliveries = await Delivery.findAll({
+    const { rows: deliveries, count } = await Delivery.findAndCountAll({
       where: {
         product: {
           [Op.iLike]: `${q}%`,
         },
       },
+      order: [['id', 'DESC']],
+      limit: quantity,
+      offset: (page - 1) * quantity,
+      paranoid: false,
       attributes: ['id', 'product', 'start_date', 'end_date', 'canceled_at'],
-      limit: 10,
-      offset: (page - 1) * 10,
+      include: [
+        {
+          model: Recipient,
+          as: 'recipient',
+          attributes: [
+            'id',
+            'name',
+            'street',
+            'number',
+            'complement',
+            'state',
+            'city',
+            'zipcode',
+          ],
+        },
+        {
+          model: Deliveryman,
+          as: 'deliveryman',
+          attributes: ['id', 'name', 'email'],
+          include: [
+            {
+              model: File,
+              as: 'avatar',
+              attributes: ['name', 'path', 'url'],
+            },
+          ],
+        },
+        {
+          model: File,
+          as: 'signature',
+          attributes: ['name', 'path', 'url'],
+        },
+      ],
+    });
+
+    // if (!deliveries.length) {
+    //   return res.status(401).json({ error: 'Deliveries not found' });
+    // }
+
+    return res.json({
+      deliveries,
+      count,
+      totalPages: Math.ceil(count / quantity),
+    });
+  }
+
+  async show(req, res) {
+    const { id } = req.params;
+
+    const delivery = await Delivery.findOne({
+      where: {
+        id,
+      },
+      paranoid: false,
       include: [
         {
           model: Recipient,
@@ -50,11 +106,11 @@ class DeliveryController {
       ],
     });
 
-    // if (!deliveries.length) {
-    //   return res.status(401).json({ error: 'Deliveries not found' });
-    // }
+    if (!delivery) {
+      return res.status(400).json({ error: 'Delivery not exists.' });
+    }
 
-    return res.json(deliveries);
+    return res.json(delivery);
   }
 
   async store(req, res) {
@@ -116,7 +172,7 @@ class DeliveryController {
 
     const { id } = req.params;
 
-    const delivery = await Delivery.findByPk(id);
+    const delivery = await Delivery.findByPk(id, { paranoid: false });
 
     if (!delivery) {
       return res.status(400).json({ error: 'Delivery not found' });
@@ -154,13 +210,13 @@ class DeliveryController {
   async delete(req, res) {
     const { id } = req.params;
 
-    const delivery = await Delivery.findByPk(id);
+    const delivery = await Delivery.findByPk(id, { paranoid: false });
 
     if (!delivery) {
       return res.status(400).json({ error: 'Delivery not found' });
     }
 
-    await Delivery.destroy({ where: { id } });
+    await Delivery.destroy({ where: { id }, force: true });
 
     return res.status(200).json();
   }

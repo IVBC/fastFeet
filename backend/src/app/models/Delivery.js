@@ -7,6 +7,23 @@ class Delivery extends Model {
         product: Sequelize.STRING,
         start_date: Sequelize.DATE,
         end_date: Sequelize.DATE,
+        status: {
+          type: Sequelize.VIRTUAL,
+          get() {
+            if (this.canceled_at) {
+              return 'CANCELED';
+            }
+
+            if (!this.start_date) {
+              return 'PENDING';
+            }
+            if (!this.end_date) {
+              return 'WITHDRAWN';
+            }
+
+            return 'DELIVERED';
+          },
+        },
       },
       {
         sequelize,

@@ -5,14 +5,17 @@ import Recipient from '../models/Recipient';
 
 class RecipientController {
   async index(req, res) {
-    const { q = '' } = req.query;
+    const { page = 1, q = '', quantity = 10 } = req.query;
 
-    const recipients = await Recipient.findAll({
+    const { rows: recipients, count } = await Recipient.findAndCountAll({
       where: {
         name: {
           [Op.iLike]: `${q}%`,
         },
       },
+      order: [['id', 'DESC']],
+      limit: quantity,
+      offset: (page - 1) * quantity,
       attributes: [
         'id',
         'name',
@@ -29,7 +32,37 @@ class RecipientController {
     //   return res.status(400).json({ error: 'Recipent does note exists.' });
     // }
 
-    return res.json(recipients);
+    return res.json({
+      recipients,
+      count,
+      totalPages: Math.ceil(count / quantity),
+    });
+  }
+
+  async show(req, res) {
+    const { id } = req.params;
+
+    const recipient = await Recipient.findOne({
+      where: {
+        id,
+      },
+      attributes: [
+        'id',
+        'name',
+        'street',
+        'number',
+        'complement',
+        'state',
+        'city',
+        'zipcode',
+      ],
+    });
+
+    if (!recipient) {
+      return res.status(400).json({ error: 'Recipient not exists.' });
+    }
+
+    return res.json(recipient);
   }
 
   async store(req, res) {
@@ -45,7 +78,7 @@ class RecipientController {
     });
 
     if (!(await schema.isValid(req.body))) {
-      return res.status(401).json({ error: 'Validate fails.' });
+      return res.status(400).json({ error: 'Validate fails.' });
     }
     const recipientExists = await Recipient.findOne({
       where: { name: req.body.name },

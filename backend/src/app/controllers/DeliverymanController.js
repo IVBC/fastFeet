@@ -6,14 +6,17 @@ import File from '../models/File';
 
 class DeliverymanController {
   async index(req, res) {
-    const { q = '' } = req.query;
+    const { page = 1, q = '', quantity = 10 } = req.query;
 
-    const delivery_people = await Deliveryman.findAll({
+    const { rows: deliverers, count } = await Deliveryman.findAndCountAll({
       where: {
         name: {
           [Op.iLike]: `${q}%`,
         },
       },
+      order: [['id', 'DESC']],
+      limit: quantity,
+      offset: (page - 1) * quantity,
       attributes: ['id', 'name', 'email'],
       include: [
         {
@@ -28,7 +31,35 @@ class DeliverymanController {
     //   return res.status(401).json({ error: 'Deliveries not found.' });
     // }
 
-    return res.json(delivery_people);
+    return res.json({
+      deliverers,
+      count,
+      totalPages: Math.ceil(count / quantity),
+    });
+  }
+
+  async show(req, res) {
+    const { id } = req.params;
+
+    const deliveryman = await Deliveryman.findOne({
+      where: {
+        id,
+      },
+      attributes: ['id', 'name', 'email'],
+      include: [
+        {
+          model: File,
+          as: 'avatar',
+          attributes: ['id', 'name', 'path', 'url'],
+        },
+      ],
+    });
+
+    if (!deliveryman) {
+      return res.status(400).json({ error: 'Delivery not exists.' });
+    }
+
+    return res.json(deliveryman);
   }
 
   async store(req, res) {
@@ -95,13 +126,13 @@ class DeliverymanController {
     });
 
     if (!deliveryman) {
-      return res.status(401).json({ error: 'Deliveryman not exists.' });
+      return res.status(400).json({ error: 'Deliveryman not exists.' });
     }
 
     const avatar = await File.findByPk(avatar_id);
 
     if (!avatar) {
-      return res.status(401).json({ error: 'File not exists.' });
+      return res.status(400).json({ error: 'File not exists.' });
     }
 
     await deliveryman.update(req.body);
