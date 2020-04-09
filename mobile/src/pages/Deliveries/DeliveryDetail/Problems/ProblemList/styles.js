@@ -22,12 +22,13 @@ export const ListTitle = styled.Text`
 
 export const Content = styled.View`
   border-radius: 4px;
+  flex: 1;
 `;
 
 export const Card = styled.View`
-  border: 1px solid ${colors.border};
+  border: 2px solid ${colors.border};
   border-radius: 4px;
-  elevation: 3;
+  /* elevation: 1; */
   padding: 16px;
   margin-bottom: 16px;
   background-color: ${colors.bg};
@@ -38,7 +39,7 @@ export const Card = styled.View`
 
 export const CardProblem = styled.Text`
   font-size: 16px;
-  font-weight: bold;
+  /* font-weight: bold; */
   color: ${colors.fontLight};
   margin-bottom: 5px;
   flex: 1;
@@ -52,15 +53,15 @@ export const CardDate = styled.Text`
 export const List = styled.FlatList.attrs({
   keyExtractor: (item) => item.id.toString(),
   onEndReachedThreshold: 0.2,
-  showsVerticalScrollIndicator: true,
+  showsVerticalScrollIndicator: false,
   // removeClippedSubviews: true,
   // initialNumToRender: 10,
   // maxToRenderPerBatch: 100,
 })`
-  margin-bottom: 15px;
-  border-width: 3px;
+  /* margin-bottom: 15px; */
+  /* border-width: 10px;
   border-bottom-width: 0;
   border-left-width: 0;
   border-right-width: 0;
-  border-top-color: ${colors.border};
+  border-top-color: ${colors.border}; */
 `;

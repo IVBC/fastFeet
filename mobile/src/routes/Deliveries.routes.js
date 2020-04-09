@@ -1,6 +1,8 @@
 import React from 'react';
-
 import { createStackNavigator } from '@react-navigation/stack';
+
+import colors from '~/styles/colors';
+import HeaderLeft from '~/components/HeaderLeft';
 
 import Dashboard from '~/pages/Dashboard';
 
@@ -11,8 +13,6 @@ import ProblemForm from '~/pages/Deliveries/DeliveryDetail/Problems/ProblemForm'
 import ProblemList from '~/pages/Deliveries/DeliveryDetail/Problems/ProblemList';
 
 import DeliverConfirm from '~/pages/Deliveries/DeliveryDetail/DeliveryConfirm';
-
-import colors from '~/styles/colors';
 
 const Stack = createStackNavigator();
 
@@ -28,6 +28,7 @@ export default function DeliveryRoutes() {
         },
         headerTintColor: colors.bg,
         headerTransparent: true,
+        headerLeft: () => <HeaderLeft />,
       }}
       initialRouteName="Dashboard"
     >

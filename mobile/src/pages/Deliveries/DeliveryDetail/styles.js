@@ -17,16 +17,18 @@ export const Icon = styled(StyledIcon).attrs(({ color }) => ({
 export const Card = styled.View`
   background-color: ${colors.bg};
   margin-top: 10px;
-  border-radius: 4px;
+  border-radius: 6px;
+
   padding: 12px;
-  /* border: 2px solid ${colors.border}; */
-  elevation: ${(props) => (props.elevation ? props.elevation : 3)};
+
+  border: 2px solid ${colors.border};
 `;
 
 export const CardTitleContainer = styled.View`
   flex-direction: row;
+  align-items: center;
   width: 100%;
-  align-items: flex-end;
+  margin-bottom: 5px;
 `;
 
 export const CardTitle = styled.Text`
@@ -36,46 +38,48 @@ export const CardTitle = styled.Text`
   margin-left: 10px;
 `;
 
-export const CardRow = styled.View`
-  margin-top: 6px;
-  margin-top: 15px;
+export const Row = styled.View`
+  margin-top: ${({ marginTop }) => `${marginTop ?? 15}px`};
   flex-direction: row;
 `;
 
-export const CardLabel = styled.Text`
+export const CardDate = styled.View`
+  flex: 1;
+`;
+
+export const Label = styled.Text`
   font-size: 14px;
   font-weight: bold;
   color: ${colors.grey};
 `;
 
-export const CardValue = styled.Text`
+export const TextInfo = styled.Text`
   font-size: 14px;
+  margin-top: 3px;
   color: ${colors.font};
 `;
 
-export const CardActions = styled.View`
+export const CardOptions = styled.View`
   border-radius: 4px;
   padding: 0px;
 `;
 
 export const ButtonContent = styled.View`
   flex: 1;
-  border: 2px solid ${colors.border};
-  elevation: 6;
+  border: 1px solid ${colors.border};
+  elevation: 1;
   background-color: ${colors.secondary};
-  /* padding: 15px; */
 `;
 
-export const ActionButton = styled(RectButton)`
+export const OptionButton = styled(RectButton)`
   justify-content: center;
   align-items: center;
   flex: 1;
   border: 2px solid black;
-  margin: 15px;
+  padding: 15px;
 `;
 
 export const ButtonText = styled.Text`
   font-size: 12px;
-  font-weight: bold;
   color: ${colors.fontLight};
 `;

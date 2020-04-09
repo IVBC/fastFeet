@@ -13,11 +13,9 @@ export default function PressButton({ children, onLongPress }) {
   const [buttonHeight, setButtonHeight] = useState(0);
   const [error, setError] = useState(false);
 
-  console.log('PressButton');
   let _value = 0;
 
   useEffect(() => {
-    console.log('init', _value);
     _value = 0;
     pressAction.addListener((v) => {
       _value = v.value;
@@ -25,13 +23,8 @@ export default function PressButton({ children, onLongPress }) {
   }, []);
 
   const animationActionComplete = useCallback(() => {
-    let message = `Nada ${_value}`;
-
     if (_value === 1) {
-      console.log(message);
       onLongPress();
-      message = 'You held it long enough to fire the action!';
-      console.log(message);
     }
   }, [_value]);
 

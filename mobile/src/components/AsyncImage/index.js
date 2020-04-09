@@ -5,11 +5,8 @@ import { Container, Image } from './styles';
 import DefaultAvatar from '../DefaultAvatar';
 
 function AsyncImage({ style, source, name, size }) {
-  console.log('AsyncImage');
-  console.log(source);
   const [loaded, setLoaded] = useState(false);
   function onLoad() {
-    console.log('carregado');
     if (source !== null) {
       setLoaded(true);
     }

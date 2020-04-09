@@ -3,7 +3,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import { View } from 'react-native';
+import { View, Alert } from 'react-native';
 
 import List from './List';
 
@@ -28,16 +28,23 @@ export default function Dashboard() {
   const [avatarImageUrl, setAvatarImageUrl] = useState();
 
   const handleLogOut = useCallback(() => {
-    dispatch(signOut());
+    Alert.alert(
+      'Atenção',
+      'Deseja realmente sair da aplicação?',
+      [
+        {
+          text: 'Não',
+          style: 'cancel',
+        },
+        { text: 'Sim', onPress: () => dispatch(signOut()) },
+      ],
+      { cancelable: false }
+    );
   }, [dispatch]);
 
   useEffect(() => {
     if (user?.avatar.url) {
       setAvatarImageUrl(user.avatar.url);
-    } else {
-      setAvatarImageUrl(
-        'https://api.adorable.io/avatars/50/abott@adorable.png'
-      );
     }
   }, [user]);
 

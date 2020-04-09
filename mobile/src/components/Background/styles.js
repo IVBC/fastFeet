@@ -13,12 +13,12 @@ export const Container = styled.SafeAreaView`
 
 export const Background = styled.View`
   background: ${colors.primary};
-  height: ${`${heightDevice * 0.2}px`};
+  height: ${`${heightDevice * 0.15}px`};
 `;
 
 export const Content = styled.View`
-  margin-top: ${`${heightDevice * 0.21 * -1 + 60}px`};
-  /* margin-bottom: 170px; */
+  margin-top: ${`${heightDevice * 0.175 * -1 + 60}px`};
+
   flex: 1;
 `;
 

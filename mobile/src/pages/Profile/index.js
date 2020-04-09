@@ -2,24 +2,34 @@ import React, { useCallback, useMemo, useEffect, useState, memo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import pt from 'date-fns/locale/pt';
 import { format } from 'date-fns';
+import { Alert } from 'react-native';
+
+import AsyncImage from '~/components/AsyncImage';
 
 import {
   Container,
-  Card,
-  Avatar,
-  Label,
-  TextValue,
-  LogoutButton,
   Content,
+  ProfileImage,
+  Card,
+  Label,
+  Text,
+  LogoutButton,
 } from './styles';
 
 import { signOut } from '~/store/modules/auth/actions';
 
 function Profile() {
-  const dispatch = useDispatch();
   const user = useSelector((state) => state.user.profile);
 
-  const [avatarImageUrl, setAvatarImageUrl] = useState();
+  const dispatch = useDispatch();
+
+  const [avatarURL, setAvatarURL] = useState();
+
+  useEffect(() => {
+    if (user?.avatar.url) {
+      setAvatarURL(user.avatar.url);
+    }
+  }, [user]);
 
   const formatedCreatedAt = useMemo(
     () =>
@@ -30,41 +40,36 @@ function Profile() {
     [user]
   );
 
-  useEffect(() => {
-    if (user && user.avatar.url) {
-      setAvatarImageUrl(user.avatar.url);
-    } else {
-      setAvatarImageUrl(
-        'https://api.adorable.io/avatars/50/abott@adorable.png'
-      );
-    }
-  }, [user]);
-
-  const handleLogOut = useCallback(() => {
-    dispatch(signOut());
+  const handleLogout = useCallback(() => {
+    Alert.alert(
+      'Atenção',
+      'Deseja realmente sair da aplicação?',
+      [
+        {
+          text: 'Não',
+          style: 'cancel',
+        },
+        { text: 'Sim', onPress: () => dispatch(signOut()) },
+      ],
+      { cancelable: false }
+    );
   }, [dispatch]);
 
   return (
     <Container>
       <Content>
-        <Avatar
-          source={{
-            uri: avatarImageUrl,
-          }}
-          onError={() =>
-            setAvatarImageUrl(
-              'https://api.adorable.io/avatars/50/abott@adorable.png'
-            )
-          }
-        />
+        <ProfileImage>
+          <AsyncImage name={user?.name} size={200} source={avatarURL} />
+        </ProfileImage>
+
         <Card>
-          <Label>Nome</Label>
-          <TextValue>{user && user.name}</TextValue>
+          <Label>Nome completo</Label>
+          <Text>{user && user.name}</Text>
           <Label>Email</Label>
-          <TextValue>{user && user.email}</TextValue>
+          <Text>{user && user.email}</Text>
           <Label>Data de cadastro</Label>
-          <TextValue>{formatedCreatedAt}</TextValue>
-          <LogoutButton onPress={handleLogOut}>Logout</LogoutButton>
+          <Text>{formatedCreatedAt}</Text>
+          <LogoutButton onPress={handleLogout}>Logout</LogoutButton>
         </Card>
       </Content>
     </Container>

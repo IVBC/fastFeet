@@ -1,6 +1,6 @@
 import React, { useRef, useCallback, useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import PropTypes from 'prop-types';
+import { useNavigation, useRoute } from '@react-navigation/native';
+
 import * as Yup from 'yup';
 import { Alert } from 'react-native';
 
@@ -10,11 +10,10 @@ import Background from '~/components/Background';
 
 import { FormContent, Form, Input, SubmitButton } from './styles';
 
-export default function ProblemsForm({
-  route: {
+export default function ProblemsForm() {
+  const {
     params: { deliveryId },
-  },
-}) {
+  } = useRoute();
   const navigation = useNavigation();
 
   const formRef = useRef(null);
@@ -38,7 +37,7 @@ export default function ProblemsForm({
         setLoading(true);
         await api.post(`/delivery/${deliveryId}/problems`, data);
         setLoading(false);
-        Alert.alert('Problema cadastrado com successo');
+        Alert.alert('Enviado', 'O Problema foi registrado com sucesso.');
         formRef.current.clearField('description');
         navigation.goBack();
       } catch (err) {
@@ -57,7 +56,7 @@ export default function ProblemsForm({
         setLoading(false);
       }
     },
-    [deliveryId]
+    [deliveryId, navigation]
   );
 
   return (
@@ -84,10 +83,3 @@ export default function ProblemsForm({
     </Background>
   );
 }
-
-ProblemsForm.propTypes = {
-  route: PropTypes.shape({
-    params: PropTypes.shape({ deliveryId: PropTypes.number.isRequired })
-      .isRequired,
-  }).isRequired,
-};

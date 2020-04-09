@@ -1,13 +1,13 @@
 import React, { useMemo, useCallback, useState } from 'react';
 import { useRoute, useNavigation } from '@react-navigation/native';
-// import { useSelector } from 'react-redux';
+
 import { View, Alert } from 'react-native';
 import pt from 'date-fns/locale/pt';
 import { format } from 'date-fns';
 
 import api from '~/services/api';
 
-import Background from '~/components/Background/secondary';
+import Background from '~/components/Background';
 import Loading from '~/components/Loading';
 import PressButton from '~/components/PressButton';
 
@@ -19,12 +19,13 @@ import {
   Card,
   CardTitleContainer,
   CardTitle,
-  CardRow,
-  CardLabel,
-  CardValue,
+  Row,
+  CardDate,
+  Label,
+  TextInfo,
   ButtonContent,
-  CardActions,
-  ActionButton,
+  CardOptions,
+  OptionButton,
   ButtonText,
 } from './styles';
 
@@ -35,11 +36,16 @@ export default function Delivery() {
 
   const { navigate } = useNavigation();
 
-  // const user = useSelector((state) => state.user.profile);
   const [delivery, setDelivery] = useState(item);
   const [loading, setLoading] = useState(false);
 
-  const formatedStartedAt = useMemo(
+  const completeAddress = useMemo(
+    () =>
+      `${delivery.recipient.street}, ${delivery.recipient.number}, ${delivery.recipient.city} - ${delivery.recipient.state}, ${delivery.recipient.zipcode}`,
+    [delivery.recipient]
+  );
+
+  const formatedStartDate = useMemo(
     () =>
       delivery.start_date
         ? format(new Date(delivery.start_date), "dd'/'MM'/'y", {
@@ -49,7 +55,7 @@ export default function Delivery() {
     [delivery.start_date]
   );
 
-  const formatedEndedAt = useMemo(
+  const formatedEndDate = useMemo(
     () =>
       delivery.end_date
         ? format(new Date(delivery.end_date), "dd'/'MM'/'y", {
@@ -57,12 +63,6 @@ export default function Delivery() {
           })
         : '--/--/--',
     [delivery.end_date]
-  );
-
-  const adress = useMemo(
-    () =>
-      `${delivery.recipient.street}, ${delivery.recipient.number}, ${delivery.recipient.city} - ${delivery.recipient.state}, ${delivery.recipient.zipcode}`,
-    [delivery.recipient]
   );
 
   const status = useMemo(() => {
@@ -86,8 +86,6 @@ export default function Delivery() {
       const response = await api.put(`/delivery/${delivery.id}/withdraw`);
       setDelivery(response.data);
     } catch (err) {
-      console.tron.log(err);
-      console.tron.log(err.response);
       if (
         err.response.data.error ===
         'You can only pick up deliveries today between 8:00h and 18:00h'
@@ -122,60 +120,60 @@ export default function Delivery() {
           </CardTitleContainer>
           {delivery.recipient && (
             <>
-              <CardRow>
+              <Row marginTop={0}>
                 <View>
-                  <CardLabel>DESTINATÁRIO</CardLabel>
-                  <CardValue>{delivery.recipient.name}</CardValue>
+                  <Label>DESTINATÁRIO</Label>
+                  <TextInfo>{delivery.recipient.name}</TextInfo>
                 </View>
-              </CardRow>
-              <CardRow>
+              </Row>
+              <Row>
                 <View>
-                  <CardLabel>ENDEREÇO DE ENTREGA</CardLabel>
-                  <CardValue>{adress}</CardValue>
+                  <Label>ENDEREÇO DE ENTREGA</Label>
+                  <TextInfo>{completeAddress}</TextInfo>
                 </View>
-              </CardRow>
+              </Row>
             </>
           )}
 
-          <CardRow>
+          <Row>
             <View>
-              <CardLabel>PRODUTO</CardLabel>
-              <CardValue>{delivery.product}</CardValue>
+              <Label>PRODUTO</Label>
+              <TextInfo>{delivery.product}</TextInfo>
             </View>
-          </CardRow>
+          </Row>
         </Card>
         <Card>
           <CardTitleContainer>
             <Icon name="calendar" />
             <CardTitle>Situação da entrega</CardTitle>
           </CardTitleContainer>
-          <CardRow>
+          <Row marginTop={0}>
             <View>
-              <CardLabel>STATUS</CardLabel>
-              <CardValue>{status}</CardValue>
+              <Label>STATUS</Label>
+              <TextInfo>{status}</TextInfo>
             </View>
-          </CardRow>
-          <CardRow>
-            <View style={{ width: '50%' }}>
-              <CardLabel>DATA DE RETIRADA</CardLabel>
-              <CardValue>{formatedStartedAt}</CardValue>
-            </View>
-            <View style={{ width: '50%', paddingLeft: 12 }}>
-              <CardLabel>DATA DE ENTREGA</CardLabel>
-              <CardValue>{formatedEndedAt}</CardValue>
-            </View>
-          </CardRow>
+          </Row>
+          <Row>
+            <CardDate>
+              <Label>DATA DE RETIRADA</Label>
+              <TextInfo>{formatedStartDate}</TextInfo>
+            </CardDate>
+            <CardDate>
+              <Label>DATA DE ENTREGA</Label>
+              <TextInfo>{formatedEndDate}</TextInfo>
+            </CardDate>
+          </Row>
         </Card>
         {delivery.status !== 'DELIVERED' && (
-          <CardActions>
-            <CardRow>
+          <CardOptions>
+            <Row>
               {delivery.status !== 'PENDING' ? (
                 <>
                   <ButtonContent>
                     {loading ? (
                       <Loading />
                     ) : (
-                      <ActionButton
+                      <OptionButton
                         onPress={() =>
                           navigate('ProblemForm', {
                             deliveryId: delivery.id,
@@ -185,14 +183,14 @@ export default function Delivery() {
                         <Icon name="close-circle-outline" color={colors.red} />
                         <ButtonText>Informar</ButtonText>
                         <ButtonText>Problema</ButtonText>
-                      </ActionButton>
+                      </OptionButton>
                     )}
                   </ButtonContent>
                   <ButtonContent>
                     {loading ? (
                       <Loading />
                     ) : (
-                      <ActionButton
+                      <OptionButton
                         onPress={() =>
                           navigate('ProblemsList', {
                             deliveryId: delivery.id,
@@ -205,14 +203,14 @@ export default function Delivery() {
                         />
                         <ButtonText>Visualizar</ButtonText>
                         <ButtonText>Problemas</ButtonText>
-                      </ActionButton>
+                      </OptionButton>
                     )}
                   </ButtonContent>
                   <ButtonContent>
                     {loading ? (
                       <Loading />
                     ) : (
-                      <ActionButton
+                      <OptionButton
                         onPress={() =>
                           navigate('DeliverConfirm', {
                             deliveryId: delivery.id,
@@ -222,7 +220,7 @@ export default function Delivery() {
                         <Icon name="check-circle-outline" />
                         <ButtonText>Confirmar</ButtonText>
                         <ButtonText>Entrega</ButtonText>
-                      </ActionButton>
+                      </OptionButton>
                     )}
                   </ButtonContent>
                 </>
@@ -231,11 +229,6 @@ export default function Delivery() {
                   {loading ? (
                     <Loading size="large" padding={22} />
                   ) : (
-                    // <ActionButton onPress={handleWithdraw}>
-                    //   <Icon name="page-next-outline" />
-                    //   <ButtonText>Confirmar</ButtonText>
-                    //   <ButtonText>Retirada</ButtonText>
-                    // </ActionButton>
                     <PressButton onLongPress={handleWithdraw}>
                       <Icon name="page-next-outline" />
                       <ButtonText>Confirmar</ButtonText>
@@ -244,8 +237,8 @@ export default function Delivery() {
                   )}
                 </ButtonContent>
               )}
-            </CardRow>
-          </CardActions>
+            </Row>
+          </CardOptions>
         )}
       </Container>
     </Background>

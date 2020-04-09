@@ -1,5 +1,7 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
+
+import { useRoute } from '@react-navigation/native';
+
 import pt from 'date-fns/locale/pt';
 import { format } from 'date-fns';
 import { Alert } from 'react-native';
@@ -7,6 +9,8 @@ import { Alert } from 'react-native';
 import api from '~/services/api';
 
 import Background from '~/components/Background';
+import Loading from '~/components/Loading';
+import EmptyListMessage from '~/components/ListEmptyMessage';
 
 import {
   Container,
@@ -19,66 +23,71 @@ import {
   CardDate,
 } from './styles';
 
-const RenderItem = ({ item }) => (
-  <Card>
-    <CardProblem multiline textAlignVertical="top">
-      {item.description}
-    </CardProblem>
-    <CardDate>{item.createdAt}</CardDate>
-  </Card>
-);
-
-const ProblemList = ({
-  route: {
+const ProblemList = () => {
+  const {
     params: { deliveryId },
-  },
-}) => {
+  } = useRoute();
+
   const [problems, setProblems] = useState([]);
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
   const [totalPages, setTotalPages] = useState(1);
 
-  const loadMore = useCallback(
-    async ({ reset = false } = {}) => {
-      if (loading || page + 1 > totalPages) {
-        return;
-      }
-      try {
-        setLoading(true);
-        const {
-          data: { problems: _problems, totalPages: _totatlPages },
-        } = await api.get(`delivery/${deliveryId}/problems`, {
-          params: {
-            page: page + 1,
-            quantity: 10,
-          },
-        });
+  const loadMore = useCallback(async () => {
+    if (loading || page + 1 > totalPages) {
+      return;
+    }
+    try {
+      setLoading(true);
 
-        console.tron.log('data', _problems);
-        setPage(page + 1);
-        const newData = _problems.map((d) => ({
-          ...d,
-          createdAt: format(new Date(d.createdAt), "dd'/'MM'/'y", {
-            locale: pt,
-          }),
-        }));
-        const prev = reset ? [] : problems;
-        setProblems([...prev, ...newData]);
-        setTotalPages(_totatlPages);
-        setLoading(false);
-      } catch (err) {
-        console.tron.log(err);
-        setLoading(false);
-        Alert.alert('Não foi possível carregar os problemas.');
-      }
-    },
-    [deliveryId, loading, page, problems, totalPages]
-  );
+      const {
+        data: { problems: _problems, totalPages: _totatlPages },
+      } = await api.get(`delivery/${deliveryId}/problems`, {
+        params: {
+          page: page + 1,
+          quantity: 10,
+        },
+      });
+
+      setPage(page + 1);
+      const newData = _problems.map((d) => ({
+        ...d,
+        createdAt: format(new Date(d.createdAt), "dd'/'MM'/'y", {
+          locale: pt,
+        }),
+      }));
+
+      setProblems([...problems, ...newData]);
+      setTotalPages(_totatlPages);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      Alert.alert('Não foi possível carregar os problemas.');
+    }
+  }, [deliveryId, loading, page, problems, totalPages]);
 
   useEffect(() => {
     loadMore();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const renderFooter = useMemo(() => {
+    if (loading) {
+      return <Loading />;
+    }
+    return null;
+  }, [loading]);
+
+  const renderEmpty = useCallback(() => {
+    if (!loading) {
+      return (
+        <EmptyListMessage
+          iconName="clipboard-check-outline"
+          message="Nenhum Problema foi registrado."
+        />
+      );
+    }
+    return null;
+  }, [loading]);
 
   return (
     <Background>
@@ -89,29 +98,23 @@ const ProblemList = ({
         <Content>
           <List
             data={problems}
-            renderItem={RenderItem}
-            refreshing={loading}
+            renderItem={({ item: problem }) => (
+              <Card>
+                <CardProblem multiline textAlignVertical="top">
+                  {problem.description}
+                </CardProblem>
+                <CardDate>{problem.createdAt}</CardDate>
+              </Card>
+            )}
             onEndReached={loadMore}
-            onRefres={() => loadMore({ reset: true })}
+            ListEmptyComponent={renderEmpty}
+            ListFooterComponent={renderFooter}
+            contentContainerStyle={{ flexGrow: 1 }}
           />
         </Content>
       </Container>
     </Background>
   );
-};
-
-RenderItem.propTypes = {
-  item: PropTypes.shape({
-    description: PropTypes.string.isRequired,
-    createdAt: PropTypes.string.isRequired,
-  }).isRequired,
-};
-
-ProblemList.propTypes = {
-  route: PropTypes.shape({
-    params: PropTypes.shape({ deliveryId: PropTypes.number.isRequired })
-      .isRequired,
-  }).isRequired,
 };
 
 export default ProblemList;

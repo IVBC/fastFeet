@@ -17,20 +17,12 @@ export const Content = styled.ScrollView.attrs(() => ({
   },
 }))``;
 
+export const ProfileImage = styled.View`
+  margin: 40px;
+`;
+
 export const Card = styled.View`
   width: 100%;
-`;
-
-export const Label = styled.Text`
-  font-size: 16px;
-  color: ${colors.font};
-`;
-
-export const TextValue = styled.Text`
-  font-size: 22px;
-  font-weight: bold;
-  color: ${colors.fontDark};
-  margin-bottom: 15px;
 `;
 
 export const LogoutButton = styled(Button)`
@@ -39,9 +31,15 @@ export const LogoutButton = styled(Button)`
   width: 100%;
 `;
 
-export const Avatar = styled.Image`
-  height: 150px;
-  width: 150px;
-  border-radius: 75px;
-  margin: 40px;
+export const Label = styled.Text`
+  font-size: 16px;
+  color: ${colors.font};
+`;
+
+export const Text = styled.Text`
+  font-family: 'Roboto-Regular';
+  font-size: 22px;
+  font-weight: bold;
+  color: ${colors.fontDark};
+  margin-bottom: 15px;
 `;
