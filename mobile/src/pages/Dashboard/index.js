@@ -1,25 +1,22 @@
 import React, { useEffect, useState, useCallback } from 'react';
-
 import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-
 import { View, Alert } from 'react-native';
 
-import List from './List';
-
-import colors from '~/styles/colors';
+import { signOut } from '~/store/modules/auth/actions';
+import AsyncImage from '~/components/AsyncImage';
+import ListDelivery from './ListDelivery';
 
 import {
   Container,
   ProfileContainer,
   ProfileContent,
-  Welcome,
+  TitleWelcome,
   UserName,
   SignOutButton,
 } from './styles';
 
-import { signOut } from '~/store/modules/auth/actions';
-import AsyncImage from '~/components/AsyncImage';
+import colors from '~/styles/colors';
 
 export default function Dashboard() {
   const dispatch = useDispatch();
@@ -54,7 +51,7 @@ export default function Dashboard() {
         <ProfileContent>
           <AsyncImage name={user?.name} size={70} source={avatarImageUrl} />
           <View>
-            <Welcome>Bem vindo de volta,</Welcome>
+            <TitleWelcome>Bem vindo de volta,</TitleWelcome>
             <UserName>{user?.name}</UserName>
           </View>
         </ProfileContent>
@@ -62,7 +59,7 @@ export default function Dashboard() {
           <Icon name="exit-to-app" size={34} color={colors.red} />
         </SignOutButton>
       </ProfileContainer>
-      <List />
+      <ListDelivery />
     </Container>
   );
 }
