@@ -15,7 +15,7 @@ export default function Button({
   return (
     <Container
       {...rest}
-      enabled={!disabled}
+      enabled={!disabled || !loading}
       background={background}
       disabled={disabled}
     >
