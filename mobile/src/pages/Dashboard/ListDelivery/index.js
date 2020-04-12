@@ -7,11 +7,12 @@ import api from '~/services/api';
 
 import DeliveryCard from './ListItem';
 import Loading from '~/components/Loading';
+import EmptyListMessage from '~/components/ListEmptyMessage';
 
 import Header from './Header';
-import { FlatList } from './styles';
+import { List } from './styles';
 
-function List() {
+function ListDelivery() {
   const { id } = useSelector((state) => state.auth);
   const isFocused = useIsFocused();
 
@@ -22,9 +23,6 @@ function List() {
 
   // Selection for delivery type
   const [typeDelivered, setTypeDelivered] = useState(false);
-  // const { deliveredDeliveries, deliveredLoading } = useSelector(
-  //   (state) => state.deliveries
-  // );
 
   const loadDeliveries = async () => {
     if (loading) {
@@ -38,10 +36,6 @@ function List() {
     setLoading(true);
 
     try {
-      // console.log('loadDeliveries', typeDelivered, page);
-      console.log({
-        params: { page, filter: typeDelivered ? 'DELIVERED' : 'OPEN' },
-      });
       const response = await api.get(`/deliverer/${id}/deliveries`, {
         params: { page, filter: typeDelivered ? 'DELIVERED' : 'OPEN' },
       });
@@ -50,11 +44,10 @@ function List() {
         data: { deliveries: _deliveries, count },
       } = response;
 
-      console.log(_deliveries);
+      setDeliveries((prevDeliveries) => [...prevDeliveries, ..._deliveries]);
 
-      setDeliveries([...deliveries, ..._deliveries]);
       setTotal(count);
-      setPage(page + 1);
+      setPage((prevPage) => prevPage + 1);
     } catch (e) {
       Alert.alert(
         'Não foi possível carregar suas entregas !',
@@ -66,59 +59,18 @@ function List() {
   };
 
   useEffect(() => {
-    // console.log('Mudando o type: ', typeDelivered);
     if (isFocused) {
       setDeliveries([]);
       setPage(1);
       setTotal(0);
     }
-
-    // }
   }, [typeDelivered, isFocused]);
-
-  useEffect(() => {
-    loadDeliveries();
-  }, []);
 
   useEffect(() => {
     if (page === 1) {
       loadDeliveries();
     }
   }, [page]);
-
-  // useEffect(() => {
-  //   console.log('entrou aqui: ', isFocused);
-  //   if (isFocused) {
-  //     setTypeDelivered(!!typeDelivered);
-  //   }
-  // }, [isFocused]);
-
-  // useEffect(() => {
-  //   console.log('resposta: ', deliveries.length, total);
-  // }, [deliveries, total]);
-
-  // const navigateToDetail = useCallback(
-  //   (delivery) => navigate('Delivery', { delivery }),
-  //   [navigate]
-  // );
-
-  // const loadMoreDeliveredDeliveries = useCallback(() => {
-  //   if (deliveredLoading) {
-  //     return () => {};
-  //   }
-  //   return dispatch(loadMoreRequest({ delivered: true }));
-  // }, [deliveredLoading, dispatch]);
-
-  // const data = useMemo(() => (delivered ? deliveredDeliveries : deliveries), [
-  //   delivered,
-  //   deliveredDeliveries,
-  //   deliveries,
-  // ]);
-
-  // const loadMore = useMemo(
-  //   () => (delivered ? loadMoreDeliveredDeliveries : loadMoreDeliveries),
-  //   [delivered, loadMoreDeliveredDeliveries, loadMoreDeliveries]
-  // );
 
   const moreLoading = useMemo(() => {
     if (loading) {
@@ -127,11 +79,31 @@ function List() {
     return null;
   }, [loading]);
 
-  // const onRefresh = useCallback(() => loadDeliveries, [loadDeliveries]);
+  const renderEmpty = useCallback(() => {
+    if (!loading) {
+      let contentEmptyListMessage;
 
-  // const refreshing = useMemo(() => {
-  //   return loading;
-  // }, [loading]);
+      if (typeDelivered) {
+        contentEmptyListMessage = {
+          iconName: 'truck-check',
+          message: 'Não há registros de entregas.',
+        };
+      } else {
+        contentEmptyListMessage = {
+          iconName: 'truck-delivery',
+          message: 'Não há entregas pendentes.',
+        };
+      }
+
+      return (
+        <EmptyListMessage
+          iconName={contentEmptyListMessage.iconName}
+          message={contentEmptyListMessage.message}
+        />
+      );
+    }
+    return null;
+  }, [loading, typeDelivered]);
 
   return (
     <>
@@ -139,13 +111,12 @@ function List() {
         typeDelivered={typeDelivered}
         setTypeDelivered={setTypeDelivered}
       />
-      <FlatList
+      <List
         data={deliveries}
         keyExtractor={(delivery) => String(delivery.id)}
         onEndReached={loadDeliveries}
         ListFooterComponent={moreLoading}
-        // refreshing={loading}
-        // onRefresh={onRefresh}
+        ListEmptyComponent={renderEmpty}
         renderItem={({ item: delivery }) => (
           <DeliveryCard delivery={delivery} />
         )}
@@ -154,4 +125,4 @@ function List() {
   );
 }
 
-export default memo(List);
+export default memo(ListDelivery);
