@@ -1,91 +1,64 @@
 import styled from 'styled-components/native';
 import { RNCamera } from 'react-native-camera';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import StyledButton from '~/components/Button';
+import Button from '~/components/Button';
 
 import colors from '~/styles/colors';
 
+export const Container = styled.ScrollView.attrs(() => ({
+  showsVerticalIndicator: false,
+  contentContainerStyle: { flex: 1 },
+}))``;
+
 export const Content = styled.View`
-  height: 100%;
+  margin-top: 42px;
+  padding-left: 20px;
+  padding-right: 20px;
+  flex: 1;
 `;
 
-export const CameraContent = styled.View`
-  height: 100%;
-  padding: 20px;
+export const CameraContainer = styled.View`
+  width: 100%;
+  height: 88%;
   border-radius: 4px;
   overflow: hidden;
 `;
 
+export const PhotoContainer = styled.View`
+  width: 100%;
+  height: 88%;
+  border-radius: 4px;
+`;
+
+export const Preview = styled.Image`
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+`;
+
 export const Camera = styled(RNCamera)`
   flex: 1;
-  border: 2px solid ${colors.border};
-  overflow: hidden;
-  border-radius: 8px;
 `;
 
-export const Preview = styled.ImageBackground`
-  flex: 1;
-  justify-content: flex-end;
-  padding: 5px;
-  flex: 1;
-  border: 2px solid ${colors.border};
-  overflow: hidden;
-  border-radius: 8px;
-  elevation: 3;
+export const SubmitButton = styled(Button).attrs(() => ({
+  background: colors.primary,
+}))`
+  margin-top: 15px;
 `;
 
-export const PreviewContent = styled.View`
-  flex-direction: row;
-  justify-content: space-around;
-  width: 100%;
-  height: 40px;
-  background-color: ${colors.primary};
-`;
-
-export const SnapButtonContent = styled.View`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  height: 100%;
-  padding-bottom: 22px;
-`;
-
-export const SnapButton = styled.TouchableOpacity`
-  height: 62px;
-  width: 62px;
-  border-radius: 31px;
+export const ButtonCamera = styled.TouchableOpacity`
+  margin-top: -90px;
+  background: #0000004d;
+  width: 60px;
+  height: 60px;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 30px;
+  align-self: center;
+  margin-bottom: 22px;
 `;
 
-export const SnapIcon = styled(Icon).attrs(() => ({
-  name: 'camera-alt',
-  size: 26,
-  color: colors.bg,
-}))``;
-
-export const ButtonsPreviewIcon = styled(Icon).attrs(() => ({
+export const ButtonCameraIcon = styled(Icon).attrs(() => ({
   size: 25,
   color: colors.bg,
 }))``;
-
-export const ButtonsPreview = styled.TouchableOpacity`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
-
-export const ButtonContent = styled.View`
-  align-items: center;
-  margin-bottom: 10px;
-`;
-
-export const Button = styled(StyledButton)`
-  margin: 0px;
-`;
-
-export const Separator = styled.View`
-  border-color: ${colors.fontDark};
-  border-width: 1px;
-`;
