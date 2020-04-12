@@ -29,7 +29,7 @@ import {
   ButtonText,
 } from './styles';
 
-export default function Delivery() {
+export default function DeliveryDetail() {
   const {
     params: { delivery: item },
   } = useRoute();

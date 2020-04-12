@@ -11,7 +11,7 @@ import colors from '~/styles/colors';
 
 const Tab = createBottomTabNavigator();
 
-export default function Dashboard() {
+export default function MainTab() {
   return (
     <>
       <StatusBar backgroundColor={colors.bg} barStyle="dark-content" />

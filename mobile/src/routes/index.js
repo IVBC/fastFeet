@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import SignIn from '~/pages/SignIn';
 
-import DashboardRoutes from './Dashboard.routes';
+import MainTabRoutes from './MainTab.routes';
 
 const Stack = createStackNavigator();
 
@@ -21,7 +21,7 @@ export default function createRouter(isSigned = false) {
         <Stack.Screen
           name="Dashboard"
           options={{ headerShown: false }}
-          component={DashboardRoutes}
+          component={MainTabRoutes}
         />
       )}
     </Stack.Navigator>

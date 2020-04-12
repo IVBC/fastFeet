@@ -6,13 +6,11 @@ import HeaderLeft from '~/components/HeaderLeft';
 
 import Dashboard from '~/pages/Dashboard';
 
-import DeliveryDetail from '~/pages/Deliveries/DeliveryDetail';
+import DeliveryDetail from '~/pages/DeliveryDetail';
 
-import ProblemForm from '~/pages/Deliveries/DeliveryDetail/Problems/ProblemForm';
+import { ProblemForm, ProblemList } from '~/pages/DeliveryDetail/Problems';
 
-import ProblemList from '~/pages/Deliveries/DeliveryDetail/Problems/ProblemList';
-
-import DeliverConfirm from '~/pages/Deliveries/DeliveryDetail/DeliveryConfirm';
+import DeliverConfirm from '~/pages/DeliveryDetail/DeliveryConfirm';
 
 const Stack = createStackNavigator();
 
