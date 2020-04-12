@@ -23,6 +23,25 @@ export const Camera = styled(RNCamera)`
   border-radius: 8px;
 `;
 
+export const Preview = styled.ImageBackground`
+  flex: 1;
+  justify-content: flex-end;
+  padding: 5px;
+  flex: 1;
+  border: 2px solid ${colors.border};
+  overflow: hidden;
+  border-radius: 8px;
+  elevation: 3;
+`;
+
+export const PreviewContent = styled.View`
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+  height: 40px;
+  background-color: ${colors.primary};
+`;
+
 export const SnapButtonContent = styled.View`
   display: flex;
   align-items: center;
@@ -46,24 +65,6 @@ export const SnapIcon = styled(Icon).attrs(() => ({
   color: colors.bg,
 }))``;
 
-export const Preview = styled.ImageBackground`
-  flex: 1;
-  justify-content: flex-end;
-  padding: 5px;
-  flex: 1;
-  border: 2px solid ${colors.border};
-  overflow: hidden;
-  border-radius: 8px;
-  elevation: 3;
-`;
-
-export const ButtonsPreviewContent = styled.View`
-  flex-direction: row;
-  justify-content: space-around;
-  width: 100%;
-  height: 40px;
-`;
-
 export const ButtonsPreviewIcon = styled(Icon).attrs(() => ({
   size: 25,
   color: colors.bg,
@@ -82,4 +83,9 @@ export const ButtonContent = styled.View`
 
 export const Button = styled(StyledButton)`
   margin: 0px;
+`;
+
+export const Separator = styled.View`
+  border-color: ${colors.fontDark};
+  border-width: 1px;
 `;

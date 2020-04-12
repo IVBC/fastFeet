@@ -1,4 +1,3 @@
-/* eslint-disable no-nested-ternary */
 import React, { useState, useCallback } from 'react';
 
 import { useRoute, useNavigation } from '@react-navigation/native';
@@ -10,18 +9,16 @@ import Background from '~/components/Background';
 import Loading from '~/components/Loading';
 
 import {
-  Content,
   CameraContent,
   Camera,
   SnapButtonContent,
   SnapButton,
   SnapIcon,
+  PreviewContent,
   Preview,
-  ButtonsPreviewContent,
   ButtonsPreview,
   ButtonsPreviewIcon,
-  // ButtonContent,
-  // Button,
+  Separator,
 } from './styles';
 
 export default function DeliveryConfirm() {
@@ -31,26 +28,16 @@ export default function DeliveryConfirm() {
 
   const { navigate } = useNavigation();
 
+  const [loading, setLoading] = useState(false);
   const [camera, setCamera] = useState();
   const [imageUri, setImageUri] = useState(null);
-  const [loading, setLoading] = useState(false);
 
-  const takePicture = useCallback(async () => {
-    if (camera) {
-      const options = { quality: 0.5, base64: true };
-      const data = await camera.takePictureAsync(options);
-      camera.resumePreview();
-
-      setImageUri(data.uri);
-    }
-  }, [camera]);
-
-  const handleUploadImg = useCallback(async () => {
+  const handleUpload = useCallback(async () => {
     try {
       setLoading(true);
-      const imgData = new FormData();
+      const data = new FormData();
 
-      imgData.append('file', {
+      data.append('file', {
         uri: imageUri,
         type: 'image/jpeg',
         name: `delivery-confirm_${deliveryId}_${new Date().getTime()}.jpg`,
@@ -58,7 +45,7 @@ export default function DeliveryConfirm() {
 
       const {
         data: { id: signature_id },
-      } = await api.post(`/files`, imgData);
+      } = await api.post(`/files`, data);
 
       const response = await api.put(`/delivery/${deliveryId}/deliver`, {
         signature_id,
@@ -69,24 +56,36 @@ export default function DeliveryConfirm() {
           'A confirmação da entrega do produto foi realizada com sucesso.'
         );
       }
-      setLoading(false);
+
       navigate('Dashboard');
     } catch (err) {
-      setLoading(false);
       Alert.alert(
         'Não foi possível confirmar a entrega!',
         'Falha na comunicação com o servidor, verifique sua conexão com a internet.'
       );
+    } finally {
+      setLoading(false);
     }
   }, [deliveryId, navigate, imageUri]);
+
+  const takePicture = useCallback(async () => {
+    if (camera) {
+      const options = { quality: 0.5, base64: true };
+
+      const data = await camera.takePictureAsync(options);
+
+      camera.resumePreview();
+      setImageUri(data.uri);
+    }
+  }, [camera]);
 
   return (
     <Background>
       {loading ? (
-        <Loading />
-      ) : !imageUri ? (
-        <Content>
-          <CameraContent>
+        <Loading size={60} />
+      ) : (
+        <CameraContent>
+          {!imageUri ? (
             <Camera
               ref={setCamera}
               captureAudio={false}
@@ -100,24 +99,19 @@ export default function DeliveryConfirm() {
                 </SnapButton>
               </SnapButtonContent>
             </Camera>
-          </CameraContent>
-
-          {/* <ButtonContent>
-            <Button onPress={takePicture}>Confirmar</Button>
-          </ButtonContent> */}
-        </Content>
-      ) : (
-        <CameraContent>
-          <Preview source={{ uri: imageUri }}>
-            <ButtonsPreviewContent>
-              <ButtonsPreview onPress={() => setImageUri(null)}>
-                <ButtonsPreviewIcon name="close" />
-              </ButtonsPreview>
-              <ButtonsPreview>
-                <ButtonsPreviewIcon name="check" onPress={handleUploadImg} />
-              </ButtonsPreview>
-            </ButtonsPreviewContent>
-          </Preview>
+          ) : (
+            <Preview source={{ uri: imageUri }}>
+              <PreviewContent>
+                <ButtonsPreview onPress={() => setImageUri(null)}>
+                  <ButtonsPreviewIcon name="close" />
+                </ButtonsPreview>
+                <Separator />
+                <ButtonsPreview>
+                  <ButtonsPreviewIcon name="check" onPress={handleUpload} />
+                </ButtonsPreview>
+              </PreviewContent>
+            </Preview>
+          )}
         </CameraContent>
       )}
     </Background>
