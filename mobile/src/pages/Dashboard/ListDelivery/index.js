@@ -5,7 +5,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { Alert } from 'react-native';
 import api from '~/services/api';
 
-import DeliveryCard from './ListItem';
+import ListItem from './ListItem';
 import Loading from '~/components/Loading';
 import EmptyListMessage from '~/components/ListEmptyMessage';
 
@@ -117,9 +117,7 @@ function ListDelivery() {
         onEndReached={loadDeliveries}
         ListFooterComponent={moreLoading}
         ListEmptyComponent={renderEmpty}
-        renderItem={({ item: delivery }) => (
-          <DeliveryCard delivery={delivery} />
-        )}
+        renderItem={({ item: delivery }) => <ListItem delivery={delivery} />}
       />
     </>
   );

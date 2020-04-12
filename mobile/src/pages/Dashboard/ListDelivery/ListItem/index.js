@@ -20,7 +20,7 @@ import {
   FooterButtonTitle,
 } from './styles';
 
-const DeliveryCard = ({ delivery }) => {
+const ListItem = ({ delivery }) => {
   const { navigate } = useNavigation();
 
   const navigateToDetail = useCallback(
@@ -28,7 +28,7 @@ const DeliveryCard = ({ delivery }) => {
     [navigate, delivery]
   );
 
-  const dateParsed = useMemo(() => {
+  const formattedDate = useMemo(() => {
     return format(parseISO(delivery.created_at), 'MM/dd/yyyy');
   }, [delivery.created_at]);
 
@@ -46,7 +46,7 @@ const DeliveryCard = ({ delivery }) => {
       <Footer>
         <FooterContentData>
           <FooterLabel>Data</FooterLabel>
-          <FooterInfo>{dateParsed}</FooterInfo>
+          <FooterInfo>{formattedDate}</FooterInfo>
         </FooterContentData>
         <FooterContent>
           <FooterLabel>Cidade</FooterLabel>
@@ -62,14 +62,14 @@ const DeliveryCard = ({ delivery }) => {
   );
 };
 
-DeliveryCard.propTypes = {
+ListItem.propTypes = {
   delivery: PropTypes.shape({
     id: PropTypes.number.isRequired,
     product: PropTypes.string.isRequired,
-    status: PropTypes.string,
     created_at: PropTypes.string.isRequired,
     recipient: PropTypes.shape({ city: PropTypes.string }),
+    status: PropTypes.string,
   }).isRequired,
 };
 
-export default memo(DeliveryCard);
+export default memo(ListItem);

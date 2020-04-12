@@ -7,11 +7,14 @@ import colors from '~/styles/colors';
 export const Container = styled.View`
   width: 100%;
   height: 200px;
-  background-color: ${colors.secondary};
-  padding: 1px;
-  border-radius: 4px;
-  margin-bottom: 28px;
+
   border: 1px solid ${colors.border};
+  border-radius: 4px;
+
+  background-color: ${colors.secondary};
+
+  margin-bottom: 28px;
+  padding: 1px;
 `;
 
 export const Content = styled.View`
@@ -26,49 +29,48 @@ export const TitleContainer = styled.View`
 
 export const TitleIcon = styled(Icon).attrs(() => ({
   name: 'local-shipping',
-  size: 24,
   color: colors.primary,
+  size: 24,
 }))``;
 
 export const TitleText = styled.Text`
   font-family: 'Roboto-Regular';
   font-size: 14px;
-  color: ${colors.primary};
   font-weight: bold;
+  color: ${colors.primary};
   margin-left: 10px;
 `;
 
 export const Footer = styled.View`
   flex-direction: row;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 `;
 
 export const FooterContent = styled.View`
+  flex: 1;
   flex-direction: column;
   padding: 20px;
-  flex: 1;
 `;
 
 export const FooterLabel = styled.Text`
   font-family: 'Roboto-Regular';
+  font-weight: bold;
   font-size: 8px;
   color: ${colors.fontLight};
-  font-weight: bold;
 `;
 
 export const FooterInfo = styled.Text`
   font-family: 'Roboto-Regular';
   font-size: 12px;
-  color: ${colors.fontDark};
   font-weight: bold;
+  color: ${colors.fontDark};
 `;
 
 export const FooterContentData = styled.View`
+  flex: 1;
   flex-direction: column;
   padding: 20px;
-  /* width: 110px; */
-  flex: 1;
 `;
 
 export const FooterButton = styled(BorderlessButton)`
@@ -78,6 +80,6 @@ export const FooterButton = styled(BorderlessButton)`
 export const FooterButtonTitle = styled.Text`
   font-family: 'Roboto-Regular';
   font-size: 14px;
-  color: ${colors.primary};
   font-weight: bold;
+  color: ${colors.primary};
 `;
