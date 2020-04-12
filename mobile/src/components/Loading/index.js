@@ -12,7 +12,7 @@ export default function Loading({ size, background, padding }) {
 }
 
 Loading.propTypes = {
-  size: PropTypes.string,
+  size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   background: PropTypes.string,
   padding: PropTypes.number,
 };

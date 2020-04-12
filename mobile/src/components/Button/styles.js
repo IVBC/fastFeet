@@ -5,7 +5,8 @@ import colors from '~/styles/colors';
 
 export const Container = styled(RectButton)`
   height: 46px;
-  background: ${(props) => props.background};
+  background: ${({ background, disabled }) =>
+    disabled ? colors.fontTransparent : background};
   border-radius: 4px;
 
   /* Dispositivos Maiores*/
