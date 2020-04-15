@@ -35,6 +35,8 @@ export default function OrderItem({ delivery, updateDeliveries }) {
   const [status, setStatus] = useState({});
   const [formatedDates, setFormatedDates] = useState({});
 
+  console.log('DeliveryItem');
+
   useEffect(() => {
     function defineStatus() {
       if (delivery.canceled_at) {
@@ -82,10 +84,12 @@ export default function OrderItem({ delivery, updateDeliveries }) {
   }, [delivery]);
 
   function handleToggleVisible() {
+    console.log('handleToggleVisible');
     setVisible(!visible);
   }
 
   async function handleDelete() {
+    console.log('handleDelete');
     // eslint-disable-next-line no-alert
     const confirm = window.confirm('Você tem certeza que deseja excluir?');
 
@@ -98,26 +102,27 @@ export default function OrderItem({ delivery, updateDeliveries }) {
       updateDeliveries();
       toast.success('Encomenda excluida com sucesso!');
     } catch (err) {
+      console.log(err);
       toast.error('Erro ao excluir encomenda!');
     }
   }
 
   return (
     <Container statusColor={status.color} statusBackground={status.background}>
-      <td>
+      <td data-label="ID">
         <FirstItem>#{delivery.id}</FirstItem>
       </td>
-      <td>
+      <td data-label="Destinatário">
         <div>
           <p>{delivery.recipient.name}</p>
         </div>
       </td>
-      <td>
+      <td data-label="Encomenda">
         <div>
           <p>{delivery.product}</p>
         </div>
       </td>
-      <td>
+      <td data-label="Entregador">
         <div>
           {delivery.deliveryman.avatar ? (
             <img
@@ -131,17 +136,17 @@ export default function OrderItem({ delivery, updateDeliveries }) {
           <p>{delivery.deliveryman.name}</p>
         </div>
       </td>
-      <td>
+      <td data-label="Cidade">
         <div>
           <p>{delivery.recipient.city}</p>
         </div>
       </td>
-      <td>
+      <td data-label="Estado">
         <div>
           <p>{delivery.recipient.state}</p>
         </div>
       </td>
-      <td>
+      <td data-label="Status">
         <div>
           <div>
             <div />
@@ -149,10 +154,10 @@ export default function OrderItem({ delivery, updateDeliveries }) {
           </div>
         </div>
       </td>
-      <td>
+      <td data-label="Ações">
         <LastItem>
           <OptionsContainer>
-            <Badge onClick={handleToggleVisible}>
+            <Badge visible={visible} onClick={handleToggleVisible}>
               <MdMoreHoriz color="#C6C6C6" size={25} />
             </Badge>
             <OptionsList visible={visible}>
@@ -218,7 +223,7 @@ export default function OrderItem({ delivery, updateDeliveries }) {
                     <div>
                       <ImageContainer>
                         <br />
-                        {delivery.signature_id ? (
+                        {delivery.signature ? (
                           <img src={delivery.signature.url} alt="assinatura" />
                         ) : (
                           <span>Não possui assinatura</span>

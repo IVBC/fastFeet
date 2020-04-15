@@ -36,16 +36,30 @@ export const Container = styled.tr`
         border-radius: 14px;
         background: ${props => props.statusBackground};
         font-size: 14px;
+        @media (max-width: 1199.98px) and (min-width: 890px) {
+          font-size: 10px;
+        }
+
         margin-top: 14px;
+        @media (max-width: 890px) {
+          margin-top: 0;
+        }
         strong {
           color: ${props => props.statusColor};
           margin-right: 10px;
+          @media (max-width: 950px) {
+            margin-left: 5px;
+          }
         }
         div {
           margin: 6px 6px;
           background: ${props => props.statusColor};
           width: 10px;
           height: 10px;
+
+          @media (max-width: 950.98px) {
+            margin: 0px 0px 2px 5px;
+          }
         }
       }
     }
@@ -71,17 +85,6 @@ export const LastItem = styled.span`
     width: 100%;
     display: flex;
     justify-content: flex-end;
-  }
-`;
-
-export const Badge = styled.button`
-  padding: 14px 28px;
-  background: none;
-  border: 0;
-  position: relative;
-  align-content: center;
-  &:hover {
-    background: ${darken(0.02, '#fff')};
   }
 `;
 
@@ -113,12 +116,26 @@ export const OptionsList = styled.span`
   &::before {
     content: '▲';
     position: absolute;
-    left: 102px;
+    left: 114px;
     top: -13px;
     width: 0;
     height: 0;
     color: #fff;
     text-shadow: 1px 0 0 rgba(0, 0, 0, 0.25);
+  }
+`;
+
+export const Badge = styled.button`
+  padding: 10px 16px;
+  background: ${props => (props.visible ? darken(0.07, '#fff') : 'none')};
+  border-radius: ${props => (props.visible ? `${10}px` : 'none')};
+  border: 0;
+  box-shadow: ${props =>
+    props.visible ? 'inset 0px 0px 2px 0px rgba(0,0,0,0.25)' : null};
+  position: relative;
+  align-content: center;
+  &:hover {
+    background: ${props => !props.visible && darken(0.02, '#fff')};
   }
 `;
 
@@ -163,6 +180,12 @@ export const LastOption = styled.span`
 
 export const OptionsContainer = styled.span`
   position: relative;
+  & ${Badge}:hover + ${OptionsList} {
+    display: block;
+  }
+  & ${OptionsList}:hover {
+    display: block;
+  }
 `;
 
 export const ModalContainer = styled.div`
@@ -202,6 +225,10 @@ export const ImageContainer = styled.div`
   display: flex;
   align-items: center;
   align-content: center;
+  img {
+    max-width: 247px;
+    height: 120px;
+  }
 `;
 
 export const Title = styled.strong`

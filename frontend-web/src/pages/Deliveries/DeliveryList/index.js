@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-// import ReactLoading from 'react-loading';
+import ReactLoading from 'react-loading';
 import { toast } from 'react-toastify';
 import LoadingLine from '~/components/LoadingLine';
 
@@ -15,6 +15,7 @@ import {
   InitialContent,
   DeliveryListTable,
   TableHead,
+  LoadingContent,
 } from './styles';
 
 import DeliveryItem from './DeliveryItemTable';
@@ -24,31 +25,33 @@ export default function DeliveryList() {
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(2);
   const [hasMore, setHasMore] = useState(true);
+  const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
     async function loadDeliveries() {
       try {
         setLoading(true);
-        const response = await api.get('deliveries');
+        const response = await api.get('deliveries', {
+          params: {
+            q: searchValue,
+          },
+        });
         const {
           data: { deliveries: _deliveries },
         } = response;
         setDeliveries(_deliveries);
-        // setTimeout(() => {
-        //   setDeliveries(_deliveries);
-        //   setLoading(false);
-        // }, 3000);
       } catch (err) {
         toast.error('Não foi possível carregar as entregas.');
       } finally {
         setLoading(false);
       }
     }
-
+    console.log('loadDeliveries');
     loadDeliveries();
-  }, []);
+  }, [searchValue]);
 
   async function fetchMoreData() {
+    console.log('fetchMoreData');
     if (loading) return;
 
     // setLoading(true);
@@ -72,17 +75,32 @@ export default function DeliveryList() {
   }
 
   async function updateDeliveries() {
-    const response = await api.get('deliveries');
-    const { data } = response;
-
-    setDeliveries(data);
+    console.log('updateDeliveries');
+    try {
+      setLoading(true);
+      const response = await api.get('deliveries', {
+        params: {
+          q: searchValue,
+        },
+      });
+      const {
+        data: { deliveries: _deliveries },
+      } = response;
+      setDeliveries(_deliveries);
+    } catch (err) {
+      toast.error(
+        'Não foi possível atualizar a lista de entregas após a exclusão'
+      );
+    } finally {
+      setLoading(false);
+    }
   }
 
-  async function onChange(event) {
-    const response = await api.get(`deliveries?q=${event.target.value}`);
-    const { data } = response;
-    setDeliveries(data);
-  }
+  const onChange = useCallback(async event => {
+    console.log('onChange');
+
+    setSearchValue(event.target.value);
+  }, []);
 
   return (
     <Container>
@@ -90,7 +108,9 @@ export default function DeliveryList() {
         <strong>Gerenciando encomendas</strong>
         <aside>
           <SearchField onChange={onChange} placeholder="encomendas" />
-          <AddButton onClick={() => history.push('/deliveries/new')} />
+          <AddButton
+            onClick={useCallback(() => history.push('/deliveries/new'), [])}
+          />
         </aside>
       </InitialContent>
       <div>
@@ -99,19 +119,20 @@ export default function DeliveryList() {
           next={fetchMoreData}
           hasMore={hasMore}
           loader={
-            // <div style={{}}>
-            //   <ReactLoading type="balls" color="#0606060" />
-            // </div>
-            <p style={{ textAlign: 'center' }}>
-              <b>...</b>
-              {/* <ReactLoading type="balls" /> */}
-            </p>
+            <LoadingContent>
+              <ReactLoading
+                type="bars"
+                height={36}
+                width={36}
+                color="#7d7b7b"
+              />
+            </LoadingContent>
           }
           scrollableTarget="scrollableDiv"
           endMessage={
-            <p style={{ textAlign: 'center' }}>
-              <b>Yay! You have seen it all</b>
-            </p>
+            <LoadingContent>
+              <b>Opa! Você já viu tudo =)</b>
+            </LoadingContent>
           }
         >
           <DeliveryListTable>

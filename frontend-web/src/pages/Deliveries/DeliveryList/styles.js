@@ -21,6 +21,9 @@ export const InitialContent = styled.div`
     justify-content: space-between;
     display: flex;
     align-items: flex-end;
+    @media (max-width: 410px) {
+      flex-wrap: wrap-reverse;
+    }
   }
 `;
 
@@ -54,6 +57,7 @@ export const DeliveryListTable = styled.table`
   }
 
   tbody {
+    padding: 0 7px 0 0;
     height: 60vh;
     /* overflow-y: auto; */
     ::-webkit-scrollbar {
@@ -73,6 +77,8 @@ export const DeliveryListTable = styled.table`
 
   thead {
     /* fallback */
+    /* padding: 0 7px 0 0; */
+    padding: 0 14px 0 0;
   }
 
   tbody td,
@@ -108,12 +114,62 @@ export const DeliveryListTable = styled.table`
     }
   }
 
-  // Large devices (desktops, 992px and up)
+  @media (max-width: 890px) {
+    thead {
+      display: none !important;
+    }
+
+    &,
+    & tbody,
+    & tr,
+    & td {
+      display: block !important;
+      width: 100% !important;
+    }
+
+    & tr {
+      margin-bottom: 15px;
+    }
+
+    & td {
+      text-align: right;
+      padding-left: 50%;
+      text-align: right;
+      position: relative;
+    }
+
+    & td::before {
+      content: attr(data-label);
+      position: absolute;
+      left: 0;
+      width: calc(50% - 15px);
+      padding-left: 15px;
+      font-size: 15px;
+      font-weight: bold;
+      text-align: left;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      background-color: #fff;
+    }
+
+    & td div {
+      margin-bottom: 0 !important;
+      padding-left: 0px !important;
+    }
+    & td span {
+      margin-bottom: 0 !important;
+    }
+  }
+
   @media (max-width: 1199.98px) {
     tbody td,
     thead th {
       :nth-child(3) {
-        width: 33%;
+        width: 26%;
+      }
+      :nth-child(2) {
+        width: 32%;
       }
       :nth-child(4) {
         display: none;
@@ -136,4 +192,11 @@ export const TableHead = styled.tr`
     color: #444;
     padding-bottom: 14px;
   }
+`;
+
+export const LoadingContent = styled.div`
+  display: flex;
+  justify-content: center;
+  color: #7d7b7b;
+  margin-top: 6px;
 `;
