@@ -40,6 +40,11 @@ routes.delete(
   DeliveryProblemsController.delete
 );
 
+/**
+ * File
+ */
+routes.post('/files', upload.single('file'), FileController.store);
+
 routes.post('/sessions', SessionsController.store);
 
 routes.use(authMiddleware);
@@ -59,11 +64,6 @@ routes.get('/deliverers', DeliverymanController.index);
 routes.post('/deliverers', DeliverymanController.store);
 routes.put('/deliverers/:id', DeliverymanController.update);
 routes.delete('/deliverers/:id', DeliverymanController.delete);
-
-/**
- * File
- */
-routes.post('/files', upload.single('file'), FileController.store);
 
 /**
  * Delivery
