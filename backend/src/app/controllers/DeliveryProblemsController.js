@@ -29,6 +29,7 @@ class DeliveryProblemsController {
 
   async show(req, res) {
     const { id: delivery_id } = req.params;
+    const { page = 1, quantity = 10 } = req.query;
 
     const delivery = await Delivery.findByPk(delivery_id);
 
@@ -36,11 +37,18 @@ class DeliveryProblemsController {
       return res.status(400).json({ error: 'Delivery not exists.' });
     }
 
-    const problems = await DeliveryProblem.findAll({
+    const { rows: problems, count } = await DeliveryProblem.findAndCountAll({
       where: { delivery_id },
+      order: [['id', 'DESC']],
+      limit: quantity,
+      offset: (page - 1) * quantity,
     });
 
-    return res.json(problems);
+    return res.json({
+      problems,
+      count,
+      totalPages: Math.ceil(count / quantity),
+    });
   }
 
   async store(req, res) {
