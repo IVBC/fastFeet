@@ -6,13 +6,19 @@ import {
   MdEdit,
   MdDeleteForever,
   MdRemoveRedEye,
+  MdDeleteSweep,
 } from 'react-icons/md';
+
+import { confirmAlert } from 'react-confirm-alert';
+
 import { parseISO, format } from 'date-fns';
 import { toast } from 'react-toastify';
 
 import api from '~/services/api';
 import history from '~/services/history';
 import DefaultAvatar from '~/components/DefaultAvatar';
+import ConfirmAlert from '~/components/ConfirmAlert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 import {
   Container,
@@ -34,8 +40,6 @@ export default function OrderItem({ delivery, updateDeliveries }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [status, setStatus] = useState({});
   const [formatedDates, setFormatedDates] = useState({});
-
-  console.log('DeliveryItem');
 
   useEffect(() => {
     function defineStatus() {
@@ -72,10 +76,10 @@ export default function OrderItem({ delivery, updateDeliveries }) {
     function formatDates() {
       const start_date = delivery.start_date
         ? format(parseISO(delivery.start_date), 'dd/MM/yyyy')
-        : 'Produto não foi retirado';
+        : 'Produto ainda não retirado';
       const end_date = delivery.end_date
         ? format(parseISO(delivery.end_date), 'dd/MM/yyyy')
-        : 'Produto não foi entregue ';
+        : 'Produto ainda não entregue';
       return setFormatedDates({ start_date, end_date });
     }
 
@@ -84,27 +88,67 @@ export default function OrderItem({ delivery, updateDeliveries }) {
   }, [delivery]);
 
   function handleToggleVisible() {
-    console.log('handleToggleVisible');
     setVisible(!visible);
   }
 
   async function handleDelete() {
-    console.log('handleDelete');
-    // eslint-disable-next-line no-alert
-    const confirm = window.confirm('Você tem certeza que deseja excluir?');
+    // console.log('handleDelete');
+    // // eslint-disable-next-line no-alert
+    // const confirm = window.confirm('Você tem certeza que deseja excluir?');
 
-    if (!confirm) {
-      return;
-    }
+    // if (!confirm) {
+    //   return;
+    // }
 
-    try {
-      await api.delete(`/deliveries/${delivery.id}`);
-      updateDeliveries();
-      toast.success('Encomenda excluida com sucesso!');
-    } catch (err) {
-      console.log(err);
-      toast.error('Erro ao excluir encomenda!');
-    }
+    // try {
+    //   await api.delete(`/deliveries/${delivery.id}`);
+    //   updateDeliveries();
+    //   toast.success('Encomenda excluida com sucesso!');
+    // } catch (err) {
+    //   console.log(err);
+    //   toast.error('Erro ao excluir encomenda!');
+    // }
+    const deleteDelivery = async () => {
+      try {
+        await api.delete(`/deliveries/${delivery.id}`);
+        updateDeliveries();
+        toast.success(`Encomenda #${delivery.id} foi excluida com sucesso!`);
+      } catch (err) {
+        console.log(err);
+        toast.error('Erro ao excluir encomenda!');
+      }
+      console.log('apagando');
+    };
+
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <ConfirmAlert
+            callback={() => deleteDelivery()}
+            onClose={onClose}
+            title="Deseja excluir esta entrega?"
+            iconTitle={MdDeleteSweep}
+            message={
+              <>
+                <p>
+                  <strong>ID: </strong>
+                  {delivery.id}
+                </p>
+                <p>
+                  <strong>Produto: </strong>
+                  {delivery.product}
+                </p>
+                <p>
+                  Se confirmar, a entrega <strong>#{delivery.id}</strong> será
+                  removida permanentemente. Isso é irreversível. Deseja
+                  realmente excluí-la?
+                </p>
+              </>
+            }
+          />
+        );
+      },
+    });
   }
 
   return (
@@ -184,10 +228,12 @@ export default function OrderItem({ delivery, updateDeliveries }) {
                   style={{
                     overlay: {
                       background: 'Rgba(0,0,0,0.7)',
+                      zIndex: 200,
                     },
                     content: {
                       background: '#fff',
-                      width: 450,
+                      width: '100%',
+                      maxWidth: 450,
                       top: '50%',
                       left: '50%',
                       right: 'auto',

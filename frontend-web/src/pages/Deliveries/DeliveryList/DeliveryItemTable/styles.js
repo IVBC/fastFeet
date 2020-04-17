@@ -8,7 +8,7 @@ export const Container = styled.tr`
       overflow: hidden;
       text-overflow: ellipsis;
       line-height: 57px;
-      font-size: 16px;
+      font-size: 1.4rem;
       font-weight: 100;
       background: #fff;
       margin-bottom: 21px;

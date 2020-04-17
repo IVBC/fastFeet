@@ -5,7 +5,7 @@ export const Container = styled.div`
   /* margin: 34px 120px; */
   flex-direction: column;
   /* justify-content: center; */
-  padding: 20px;
+  padding: 40px 20px;
 `;
 
 export const InitialContent = styled.div`

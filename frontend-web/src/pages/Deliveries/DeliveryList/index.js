@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ReactLoading from 'react-loading';
 import { toast } from 'react-toastify';
+import { MdLocalShipping } from 'react-icons/md';
 import LoadingLine from '~/components/LoadingLine';
 
 import api from '~/services/api';
@@ -19,13 +20,17 @@ import {
 } from './styles';
 
 import DeliveryItem from './DeliveryItemTable';
+import ListEmptyMessage from '~/components/ListEmptyMessage';
 
 export default function DeliveryList() {
   const [deliveries, setDeliveries] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(2);
+  const [total, setTotal] = useState(null);
   const [hasMore, setHasMore] = useState(true);
   const [searchValue, setSearchValue] = useState('');
+
+  console.log(hasMore);
 
   useEffect(() => {
     async function loadDeliveries() {
@@ -37,9 +42,11 @@ export default function DeliveryList() {
           },
         });
         const {
-          data: { deliveries: _deliveries },
+          data: { deliveries: _deliveries, count },
         } = response;
+
         setDeliveries(_deliveries);
+        setTotal(count);
       } catch (err) {
         toast.error('Não foi possível carregar as entregas.');
       } finally {
@@ -64,36 +71,46 @@ export default function DeliveryList() {
     const {
       data: { deliveries: _deliveries, count },
     } = response;
-
+    setTotal(count);
     setDeliveries([...deliveries, ..._deliveries]);
 
     setPage(page + 1);
     // setLoading(false);
-    if (deliveries.length >= count) {
-      setHasMore(false);
-    }
   }
 
-  async function updateDeliveries() {
-    console.log('updateDeliveries');
-    try {
-      setLoading(true);
-      const response = await api.get('deliveries', {
-        params: {
-          q: searchValue,
-        },
-      });
-      const {
-        data: { deliveries: _deliveries },
-      } = response;
-      setDeliveries(_deliveries);
-    } catch (err) {
-      toast.error(
-        'Não foi possível atualizar a lista de entregas após a exclusão'
-      );
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    console.log(deliveries.length, total);
+    if (total && deliveries.length === total) {
+      setHasMore(false);
+    } else {
+      setHasMore(true);
     }
+  }, [deliveries.length, total]);
+
+  async function updateDeliveries() {
+    async function loadDeliveries() {
+      try {
+        setLoading(true);
+        const response = await api.get('deliveries', {
+          params: {
+            q: searchValue,
+          },
+        });
+        const {
+          data: { deliveries: _deliveries, count },
+        } = response;
+
+        setDeliveries(_deliveries);
+        setTotal(count);
+        setPage(2);
+      } catch (err) {
+        toast.error('Não foi possível carregar as entregas.');
+      } finally {
+        setLoading(false);
+      }
+    }
+    console.log('loadDeliveries');
+    loadDeliveries();
   }
 
   const onChange = useCallback(async event => {
@@ -177,13 +194,22 @@ export default function DeliveryList() {
                   </td>
                 </tr>
               ) : (
-                deliveries.map(delivery => (
-                  <DeliveryItem
-                    key={delivery.id}
-                    delivery={delivery}
-                    updateDeliveries={updateDeliveries}
-                  />
-                ))
+                <>
+                  {deliveries.length === 0 ? (
+                    <ListEmptyMessage
+                      icon={MdLocalShipping}
+                      message="Não há encomendas registradas ainda"
+                    />
+                  ) : (
+                    deliveries.map(delivery => (
+                      <DeliveryItem
+                        key={delivery.id}
+                        delivery={delivery}
+                        updateDeliveries={updateDeliveries}
+                      />
+                    ))
+                  )}
+                </>
               )}
             </tbody>
           </DeliveryListTable>
