@@ -1,10 +1,20 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { MdMoreHoriz, MdEdit, MdDeleteForever } from 'react-icons/md';
+import {
+  MdMoreHoriz,
+  MdEdit,
+  MdDeleteForever,
+  MdDeleteSweep,
+} from 'react-icons/md';
+
+import { confirmAlert } from 'react-confirm-alert';
+
 import { toast } from 'react-toastify';
 
 import api from '~/services/api';
 import history from '~/services/history';
+import ConfirmAlert from '~/components/ConfirmAlert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 import {
   Container,
@@ -26,42 +36,71 @@ export default function RecipientItem({ recipient, updateRecipients }) {
   }
 
   async function handleDelete() {
-    const confirm = window.confirm('Você tem certeza que deseja excluir?');
+    const deleteDelivery = async () => {
+      try {
+        await api.delete(`/recipients/${recipient.id}`);
+        updateRecipients();
+        toast.success(
+          `Destinatário #${recipient.id} foi excluido com sucesso!`
+        );
+      } catch (err) {
+        console.tron.log(err);
+        toast.error('Erro ao excluir destinatário!');
+      }
+    };
 
-    if (!confirm) {
-      return;
-    }
-
-    try {
-      await api.delete(`/recipients/${recipient.id}`);
-      updateRecipients();
-      toast.success('Destinatário excluido com sucesso!');
-    } catch (err) {
-      toast.error('Erro ao excluir destinatário!');
-    }
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <ConfirmAlert
+            callback={() => deleteDelivery()}
+            onClose={onClose}
+            title="Deseja excluir este destinatário?"
+            iconTitle={MdDeleteSweep}
+            message={
+              <>
+                <p>
+                  <strong>ID: </strong>
+                  {recipient.id}
+                </p>
+                <p>
+                  <strong>Nome: </strong>
+                  {recipient.name}
+                </p>
+                <p>
+                  Se confirmar, o destinatário <strong>#{recipient.id}</strong>{' '}
+                  será removido permanentemente. Isso é irreversível. Deseja
+                  realmente excluí-lo?
+                </p>
+              </>
+            }
+          />
+        );
+      },
+    });
   }
 
   return (
     <Container>
-      <td>
+      <td data-label="ID">
         <FirstItem>#{recipient.id}</FirstItem>
       </td>
-      <td>
+      <td data-label="Nome">
         <div>
           <p>{recipient.name}</p>
         </div>
       </td>
-      <td>
+      <td data-label="Endereço">
         <div>
           <p>
             {`${recipient.street}, ${recipient.number}, ${recipient.city} - ${recipient.state}`}
           </p>
         </div>
       </td>
-      <td>
+      <td data-label="Ações">
         <LastItem>
           <OptionsContainer>
-            <Badge onClick={handleToggleVisible}>
+            <Badge visible={visible} onClick={handleToggleVisible}>
               <MdMoreHoriz color="#C6C6C6" size={25} />
             </Badge>
             <OptionsList visible={visible}>

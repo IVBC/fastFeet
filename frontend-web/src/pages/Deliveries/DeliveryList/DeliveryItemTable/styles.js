@@ -102,7 +102,7 @@ export const Button = styled.button`
 
 export const OptionsList = styled.span`
   position: absolute;
-  z-index: 100;
+  z-index: 99;
   width: 150px;
   /* left: calc(50% - 73px); */
   top: 100%;

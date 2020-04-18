@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-// import ReactLoading from 'react-loading';
+import ReactLoading from 'react-loading';
 import { toast } from 'react-toastify';
+import { MdGroup } from 'react-icons/md';
 import LoadingLine from '~/components/LoadingLine';
 
 import api from '~/services/api';
@@ -15,29 +16,36 @@ import {
   InitialContent,
   DeliveryListTable,
   TableHead,
+  LoadingContent,
 } from './styles';
 
 import DelivererItem from './DelivererItemTable';
+import ListEmptyMessage from '~/components/ListEmptyMessage';
 
 export default function DelivererList() {
   const [deliverers, setDeliverers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(2);
+  const [total, setTotal] = useState(null);
   const [hasMore, setHasMore] = useState(true);
+  const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
     async function loadDeliverers() {
       try {
         setLoading(true);
-        const response = await api.get('deliverers');
+        const response = await api.get('deliverers', {
+          params: {
+            q: searchValue,
+          },
+        });
         const {
-          data: { deliverers: _deliverers },
+          data: { deliverers: _deliverers, count },
         } = response;
+
         setDeliverers(_deliverers);
-        // setTimeout(() => {
-        //   setDeliveries(_deliveries);
-        //   setLoading(false);
-        // }, 3000);
+        setPage(2);
+        setTotal(count);
       } catch (err) {
         toast.error('Não foi possível carregar os entregadores.');
       } finally {
@@ -46,12 +54,10 @@ export default function DelivererList() {
     }
 
     loadDeliverers();
-  }, []);
+  }, [searchValue]);
 
   async function fetchMoreData() {
     if (loading) return;
-
-    // setLoading(true);
 
     const response = await api.get('/deliverers', {
       params: {
@@ -62,31 +68,48 @@ export default function DelivererList() {
       data: { deliverers: _deliverers, count },
     } = response;
 
+    setTotal(count);
     setDeliverers([...deliverers, ..._deliverers]);
 
     setPage(page + 1);
-    // setLoading(false);
-    if (deliverers.length >= count) {
-      setHasMore(false);
-    }
   }
+
+  useEffect(() => {
+    if (total && deliverers.length === total) {
+      setHasMore(false);
+    } else {
+      setHasMore(true);
+    }
+  }, [deliverers.length, total]);
 
   async function updateDeliverers() {
-    const response = await api.get('deliverers');
-    const {
-      data: { deliverers: _deliverers },
-    } = response;
+    async function loadDeliveries() {
+      try {
+        setLoading(true);
+        const response = await api.get('deliverers', {
+          params: {
+            q: searchValue,
+          },
+        });
+        const {
+          data: { deliverers: _deliverers, count },
+        } = response;
 
-    setDeliverers(_deliverers);
-  }
+        setDeliverers(_deliverers);
+        setTotal(count);
+        setPage(2);
+      } catch (err) {
+        toast.error('Não foi possível carregar as entregas.');
+      } finally {
+        setLoading(false);
+      }
+    }
 
-  async function onChange(event) {
-    const response = await api.get(`deliverers?q=${event.target.value}`);
-    const {
-      data: { deliverers: _deliverers },
-    } = response;
-    setDeliverers(_deliverers);
+    loadDeliveries();
   }
+  const onChange = useCallback(async event => {
+    setSearchValue(event.target.value);
+  }, []);
 
   return (
     <Container>
@@ -103,19 +126,20 @@ export default function DelivererList() {
           next={fetchMoreData}
           hasMore={hasMore}
           loader={
-            // <div style={{}}>
-            //   <ReactLoading type="balls" color="#0606060" />
-            // </div>
-            <p style={{ textAlign: 'center' }}>
-              <b>...</b>
-              {/* <ReactLoading type="balls" /> */}
-            </p>
+            <LoadingContent>
+              <ReactLoading
+                type="bars"
+                height={36}
+                width={36}
+                color="#7d7b7b"
+              />
+            </LoadingContent>
           }
           scrollableTarget="scrollableDiv"
           endMessage={
-            <p style={{ textAlign: 'center' }}>
-              <b>Opa! Vocẽ já viu tudo =)</b>
-            </p>
+            <LoadingContent>
+              <b>Opa! Você já viu tudo =)</b>
+            </LoadingContent>
           }
         >
           <DeliveryListTable>
@@ -148,13 +172,22 @@ export default function DelivererList() {
                   </td>
                 </tr>
               ) : (
-                deliverers.map(deliveryman => (
-                  <DelivererItem
-                    key={deliveryman.id}
-                    deliveryman={deliveryman}
-                    updateDeliverers={updateDeliverers}
-                  />
-                ))
+                <>
+                  {deliverers.length === 0 ? (
+                    <ListEmptyMessage
+                      icon={MdGroup}
+                      message="Não há entregadores registrados ainda"
+                    />
+                  ) : (
+                    deliverers.map(deliveryman => (
+                      <DelivererItem
+                        key={deliveryman.id}
+                        deliveryman={deliveryman}
+                        updateDeliverers={updateDeliverers}
+                      />
+                    ))
+                  )}
+                </>
               )}
             </tbody>
           </DeliveryListTable>

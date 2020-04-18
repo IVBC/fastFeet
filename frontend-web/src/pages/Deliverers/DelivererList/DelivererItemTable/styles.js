@@ -8,7 +8,7 @@ export const Container = styled.tr`
       overflow: hidden;
       text-overflow: ellipsis;
       line-height: 57px;
-      font-size: 16px;
+      font-size: 1.4rem;
       font-weight: 100;
       background: #fff;
       margin-bottom: 21px;
@@ -48,17 +48,6 @@ export const LastItem = styled.span`
   border-bottom-right-radius: 4px;
 `;
 
-export const Badge = styled.button`
-  padding: 14px 28px;
-  background: none;
-  border: 0;
-  position: relative;
-  align-content: center;
-  &:hover {
-    background: ${darken(0.02, '#fff')};
-  }
-`;
-
 export const Button = styled.button`
   background: none;
   border: 0;
@@ -73,7 +62,7 @@ export const Button = styled.button`
 
 export const OptionsList = styled.span`
   position: absolute;
-  z-index: 100;
+  z-index: 99;
   width: 150px;
   left: calc(50% - 115px);
   top: 100%;
@@ -93,6 +82,22 @@ export const OptionsList = styled.span`
     height: 0;
     color: #fff;
     text-shadow: 1px 0 0 rgba(0, 0, 0, 0.25);
+  }
+`;
+
+export const Badge = styled.button`
+  padding: 14px 28px;
+
+  background: ${props => (props.visible ? darken(0.07, '#fff') : 'none')};
+  border-radius: ${props => (props.visible ? `${10}px` : 'none')};
+  border: 0;
+  box-shadow: ${props =>
+    props.visible ? 'inset 0px 0px 2px 0px rgba(0,0,0,0.25)' : null};
+  position: relative;
+  align-content: center;
+  &:hover {
+    background: ${props => !props.visible && darken(0.02, '#fff')};
+  }
   }
 `;
 
@@ -137,4 +142,10 @@ export const LastOption = styled.span`
 
 export const OptionsContainer = styled.span`
   position: relative;
+  & ${Badge}:hover + ${OptionsList} {
+    display: block;
+  }
+  & ${OptionsList}:hover {
+    display: block;
+  }
 `;

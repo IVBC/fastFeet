@@ -140,8 +140,7 @@ export default function OrderItem({ delivery, updateDeliveries }) {
                 </p>
                 <p>
                   Se confirmar, a entrega <strong>#{delivery.id}</strong> será
-                  removida permanentemente. Isso é irreversível. Deseja
-                  realmente excluí-la?
+                  removida permanentemente. Deseja realmente excluí-la?
                 </p>
               </>
             }

@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { MdMoreHoriz, MdEdit, MdDeleteForever } from 'react-icons/md';
+import {
+  MdMoreHoriz,
+  MdEdit,
+  MdDeleteForever,
+  MdDeleteSweep,
+} from 'react-icons/md';
 import { toast } from 'react-toastify';
+import { confirmAlert } from 'react-confirm-alert';
 
 import api from '~/services/api';
 import history from '~/services/history';
 
 import DefaultAvatar from '~/components/DefaultAvatar';
+import ConfirmAlert from '~/components/ConfirmAlert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 import {
   Container,
@@ -28,28 +36,56 @@ export default function DeliverymenItem({ deliveryman, updateDeliverers }) {
   }
 
   async function handleDelete() {
-    // eslint-disable-next-line no-alert
-    const confirm = window.confirm('Você tem certeza que deseja excluir?');
+    const deleteDelivery = async () => {
+      try {
+        await api.delete(`/deliverers/${deliveryman.id}`);
+        toast.success(
+          `Entregador #${deliveryman.id} - ${deliveryman.name}  foi excluido com sucesso!`
+        );
+        updateDeliverers();
+      } catch (err) {
+        toast.error('Erro ao excluir entregador!');
+      }
+    };
 
-    if (!confirm) {
-      return;
-    }
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <ConfirmAlert
+            callback={() => deleteDelivery()}
+            onClose={onClose}
+            title="Deseja excluir este entregador?"
+            iconTitle={MdDeleteSweep}
+            message={
+              <>
+                <p>
+                  <strong>ID: </strong>
+                  {deliveryman.id}
+                </p>
+                <p>
+                  <strong>Nome: </strong>
+                  {deliveryman.name}
+                </p>
 
-    try {
-      await api.delete(`/deliverers/${deliveryman.id}`);
-      updateDeliverers();
-      toast.success('Entregador excluido com sucesso!');
-    } catch (err) {
-      toast.error('Erro ao excluir entregador!');
-    }
+                <p>
+                  Se confirmar, o entregador <strong>#{deliveryman.id}</strong>{' '}
+                  será removido permanentemente. Isso é irreversível. Deseja
+                  realmente excluí-lo?
+                </p>
+              </>
+            }
+          />
+        );
+      },
+    });
   }
 
   return (
     <Container>
-      <td>
+      <td data-label="ID">
         <FirstItem>#{deliveryman.id}</FirstItem>
       </td>
-      <td>
+      <td data-label="Foto">
         <div>
           {deliveryman.avatar ? (
             <img src={deliveryman.avatar.url} alt={deliveryman.name} />
@@ -58,20 +94,20 @@ export default function DeliverymenItem({ deliveryman, updateDeliverers }) {
           )}
         </div>
       </td>
-      <td>
+      <td data-label="Nome">
         <div>
           <p>{deliveryman.name}</p>
         </div>
       </td>
-      <td>
+      <td data-label="Email">
         <div>
           <p>{deliveryman.email}</p>
         </div>
       </td>
-      <td>
+      <td data-label="Ações">
         <LastItem>
           <OptionsContainer>
-            <Badge onClick={handleToggleVisible}>
+            <Badge visible={visible} onClick={handleToggleVisible}>
               <MdMoreHoriz color="#C6C6C6" size={25} />
             </Badge>
             <OptionsList visible={visible}>

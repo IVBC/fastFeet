@@ -20,6 +20,13 @@ export const Container = styled.tr`
         white-space: nowrap;
         text-overflow: ellipsis;
         line-height: 40px;
+
+        @media (min-width: 1100px) {
+          width: 1000px;
+        }
+        @media (max-width: 1100px) and (min-width: 890px) {
+          width: 700px !important;
+        }
       }
     }
   }
@@ -42,17 +49,6 @@ export const LastItem = styled.span`
   border-bottom-right-radius: 4px;
 `;
 
-export const Badge = styled.button`
-  padding: 14px 28px;
-  background: none;
-  border: 0;
-  position: relative;
-  align-content: center;
-  &:hover {
-    background: ${darken(0.02, '#fff')};
-  }
-`;
-
 export const Button = styled.button`
   background: none;
   border: 0;
@@ -67,7 +63,7 @@ export const Button = styled.button`
 
 export const OptionsList = styled.span`
   position: absolute;
-  z-index: 100;
+  z-index: 99;
   width: 200px;
   left: calc(50% - 164px);
   top: 100%;
@@ -87,6 +83,20 @@ export const OptionsList = styled.span`
     height: 0;
     color: #fff;
     text-shadow: 1px 0 0 rgba(0, 0, 0, 0.25);
+  }
+`;
+
+export const Badge = styled.button`
+  padding: 14px 28px;
+  background: ${props => (props.visible ? darken(0.07, '#fff') : 'none')};
+  border-radius: ${props => (props.visible ? `${10}px` : 'none')};
+  border: 0;
+  box-shadow: ${props =>
+    props.visible ? 'inset 0px 0px 2px 0px rgba(0,0,0,0.25)' : null};
+  position: relative;
+  align-content: center;
+  &:hover {
+    background: ${props => !props.visible && darken(0.02, '#fff')};
   }
 `;
 
@@ -126,11 +136,18 @@ export const LastOption = styled.span`
     color: #999999;
     margin-bottom: 6px;
     margin-top: 6px;
+    text-align: left;
   }
 `;
 
 export const OptionsContainer = styled.span`
   position: relative;
+  & ${Badge}:hover + ${OptionsList} {
+    display: block;
+  }
+  & ${OptionsList}:hover {
+    display: block;
+  }
 `;
 
 export const ModalContainer = styled.div`
@@ -141,9 +158,10 @@ export const ModalContainer = styled.div`
     color: #444444;
   }
   span {
+    word-break: break-word;
     display: flex;
     text-align: justify;
-    margin-top: 4px;
+    margin-top: 8px;
     font-size: 16px;
     color: #666666;
   }

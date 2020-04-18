@@ -30,8 +30,6 @@ export default function DeliveryList() {
   const [hasMore, setHasMore] = useState(true);
   const [searchValue, setSearchValue] = useState('');
 
-  console.log(hasMore);
-
   useEffect(() => {
     async function loadDeliveries() {
       try {
@@ -46,6 +44,7 @@ export default function DeliveryList() {
         } = response;
 
         setDeliveries(_deliveries);
+        setPage(2);
         setTotal(count);
       } catch (err) {
         toast.error('Não foi possível carregar as entregas.');
@@ -53,15 +52,12 @@ export default function DeliveryList() {
         setLoading(false);
       }
     }
-    console.log('loadDeliveries');
+
     loadDeliveries();
   }, [searchValue]);
 
   async function fetchMoreData() {
-    console.log('fetchMoreData');
     if (loading) return;
-
-    // setLoading(true);
 
     const response = await api.get('/deliveries', {
       params: {
@@ -71,11 +67,11 @@ export default function DeliveryList() {
     const {
       data: { deliveries: _deliveries, count },
     } = response;
+
     setTotal(count);
     setDeliveries([...deliveries, ..._deliveries]);
 
     setPage(page + 1);
-    // setLoading(false);
   }
 
   useEffect(() => {

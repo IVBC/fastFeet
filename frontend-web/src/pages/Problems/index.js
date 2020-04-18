@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-// import ReactLoading from 'react-loading';
+import ReactLoading from 'react-loading';
 import { toast } from 'react-toastify';
+import { MdFeedback } from 'react-icons/md';
 import LoadingLine from '~/components/LoadingLine';
 
 import api from '~/services/api';
@@ -11,14 +12,17 @@ import {
   InitialContent,
   ProblemListTable,
   TableHead,
+  LoadingContent,
 } from './styles';
 
 import ProblemItem from './ProblemItemTable';
+import ListEmptyMessage from '~/components/ListEmptyMessage';
 
 export default function ProblemList() {
   const [problems, setProblems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(2);
+  const [total, setTotal] = useState(null);
   const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
@@ -27,15 +31,14 @@ export default function ProblemList() {
         setLoading(true);
         const response = await api.get('delivery/problems');
         const {
-          data: { problems: _problems },
+          data: { problems: _problems, count },
         } = response;
+
         setProblems(_problems);
-        // setTimeout(() => {
-        //   setDeliveries(_deliveries);
-        //   setLoading(false);
-        // }, 3000);
+        setPage(2);
+        setTotal(count);
       } catch (err) {
-        toast.error('Não foi possível carregar os entregadores.');
+        toast.error('Não foi possível carregar os problemas.');
       } finally {
         setLoading(false);
       }
@@ -47,8 +50,6 @@ export default function ProblemList() {
   async function fetchMoreData() {
     if (loading) return;
 
-    // setLoading(true);
-
     const response = await api.get('delivery/problems', {
       params: {
         page,
@@ -58,22 +59,47 @@ export default function ProblemList() {
       data: { problems: _problems, count },
     } = response;
 
+    setTotal(count);
     setProblems([...problems, ..._problems]);
 
     setPage(page + 1);
-    // setLoading(false);
-    if (problems.length >= count) {
-      setHasMore(false);
-    }
   }
 
-  async function updateProblems() {
-    const response = await api.get('delivery/problems');
-    const {
-      data: { problems: _problems },
-    } = response;
+  useEffect(() => {
+    if (total && problems.length === total) {
+      setHasMore(false);
+    } else {
+      setHasMore(true);
+    }
+  }, [problems.length, total]);
 
-    setProblems(_problems);
+  async function updateProblems() {
+    // const response = await api.get('delivery/problems');
+    // const {
+    //   data: { problems: _problems },
+    // } = response;
+
+    // setProblems(_problems);
+
+    async function loadProblems() {
+      try {
+        setLoading(true);
+        const response = await api.get('delivery/problems');
+        const {
+          data: { problems: _problems, count },
+        } = response;
+
+        setTotal(count);
+        setProblems(_problems);
+        setPage(2);
+      } catch (err) {
+        toast.error('Não foi possível carregar os problemas.');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadProblems();
   }
 
   // async function onChange(event) {
@@ -87,7 +113,7 @@ export default function ProblemList() {
   return (
     <Container>
       <InitialContent>
-        <strong>Gerenciando destinatários</strong>
+        <strong>Problemas na entrega</strong>
       </InitialContent>
       <div>
         <InfiniteScroll
@@ -95,19 +121,20 @@ export default function ProblemList() {
           next={fetchMoreData}
           hasMore={hasMore}
           loader={
-            // <div style={{}}>
-            //   <ReactLoading type="balls" color="#0606060" />
-            // </div>
-            <p style={{ textAlign: 'center' }}>
-              <b>...</b>
-              {/* <ReactLoading type="balls" /> */}
-            </p>
+            <LoadingContent>
+              <ReactLoading
+                type="bars"
+                height={36}
+                width={36}
+                color="#7d7b7b"
+              />
+            </LoadingContent>
           }
           scrollableTarget="scrollableDiv"
           endMessage={
-            <p style={{ textAlign: 'center' }}>
-              <b>Opa! Vocẽ já viu tudo =)</b>
-            </p>
+            <LoadingContent>
+              <b>Opa! Você já viu tudo =)</b>
+            </LoadingContent>
           }
         >
           <ProblemListTable>
@@ -132,13 +159,22 @@ export default function ProblemList() {
                   </td>
                 </tr>
               ) : (
-                problems.map(problem => (
-                  <ProblemItem
-                    key={problem.id}
-                    problem={problem}
-                    updateProblems={updateProblems}
-                  />
-                ))
+                <>
+                  {problems.length === 0 ? (
+                    <ListEmptyMessage
+                      icon={MdFeedback}
+                      message="Não há problemas registrados ainda"
+                    />
+                  ) : (
+                    problems.map(problem => (
+                      <ProblemItem
+                        key={problem.id}
+                        problem={problem}
+                        updateProblems={updateProblems}
+                      />
+                    ))
+                  )}
+                </>
               )}
             </tbody>
           </ProblemListTable>
