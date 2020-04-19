@@ -14,6 +14,6 @@ export default function ListEmptyMessage({ icon, message }) {
 }
 
 ListEmptyMessage.propTypes = {
-  icon: PropTypes.string.isRequired,
+  icon: PropTypes.func.isRequired,
   message: PropTypes.string.isRequired,
 };

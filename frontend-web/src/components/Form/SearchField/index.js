@@ -1,17 +1,11 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 
 import { Container } from './styles';
 
-export default function SearchField({ onChange, placeholder, ...rest }) {
+function SearchField({ onChange, placeholder, ...rest }) {
   return (
     <Container>
-      {/* <input
-        type="text"
-        placeholder={`🔍  Buscar por ${placeholder}`}
-        {...rest}
-      /> */}
-
       <div className="form__group">
         <input
           type="text"
@@ -27,6 +21,8 @@ export default function SearchField({ onChange, placeholder, ...rest }) {
     </Container>
   );
 }
+
+export default memo(SearchField);
 
 SearchField.propTypes = {
   placeholder: PropTypes.string.isRequired,

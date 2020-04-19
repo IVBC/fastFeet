@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 import PropTypes from 'prop-types';
 
 import { Container } from './styles';
 
-export default function DefaultAvatar({ name, size }) {
+function DefaultAvatar({ name, size }) {
   const Initials = name.split(' ');
   const colors = [
     {
@@ -45,6 +45,8 @@ export default function DefaultAvatar({ name, size }) {
     </Container>
   );
 }
+
+export default memo(DefaultAvatar);
 
 DefaultAvatar.propTypes = {
   name: PropTypes.string.isRequired,

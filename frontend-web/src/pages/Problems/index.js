@@ -3,10 +3,14 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import ReactLoading from 'react-loading';
 import { toast } from 'react-toastify';
 import { MdFeedback } from 'react-icons/md';
-import LoadingLine from '~/components/LoadingLine';
 
 import api from '~/services/api';
 
+import LoadingLine from '~/components/LoadingLine';
+import ProblemItem from './ProblemItemTable';
+import ListEmptyMessage from '~/components/ListEmptyMessage';
+
+import colors from '~/styles/colors';
 import {
   Container,
   InitialContent,
@@ -14,9 +18,6 @@ import {
   TableHead,
   LoadingContent,
 } from './styles';
-
-import ProblemItem from './ProblemItemTable';
-import ListEmptyMessage from '~/components/ListEmptyMessage';
 
 export default function ProblemList() {
   const [problems, setProblems] = useState([]);
@@ -74,13 +75,6 @@ export default function ProblemList() {
   }, [problems.length, total]);
 
   async function updateProblems() {
-    // const response = await api.get('delivery/problems');
-    // const {
-    //   data: { problems: _problems },
-    // } = response;
-
-    // setProblems(_problems);
-
     async function loadProblems() {
       try {
         setLoading(true);
@@ -102,14 +96,6 @@ export default function ProblemList() {
     loadProblems();
   }
 
-  // async function onChange(event) {
-  //   const response = await api.get(`problems?q=${event.target.value}`);
-  //   const {
-  //     data: { problems: _problems },
-  //   } = response;
-  //   setProblems(_problems);
-  // }
-
   return (
     <Container>
       <InitialContent>
@@ -126,7 +112,7 @@ export default function ProblemList() {
                 type="bars"
                 height={36}
                 width={36}
-                color="#7d7b7b"
+                color={colors.fontLigh}
               />
             </LoadingContent>
           }

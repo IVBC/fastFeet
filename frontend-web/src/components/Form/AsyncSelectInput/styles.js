@@ -10,7 +10,7 @@ export const Container = styled.div`
 `;
 
 export const Label = styled.label`
-  color: #444;
+  color: ${colors.fontDark};
   font-weight: bold;
   text-align: left;
   margin-bottom: 9px;

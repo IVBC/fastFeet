@@ -9,7 +9,7 @@ export default styled.button`
   font-size: 14px;
   font-weight: bold;
 
-  color: #fff;
+  color: ${colors.second};
   border: 0;
   border-radius: 4px;
 
@@ -18,11 +18,16 @@ export default styled.button`
   display: flex;
   text-align: center;
   align-items: center;
+  justify-content: center;
   &:hover {
     background: ${props => darken(0.06, props.background || colors.primary)};
   }
 
-  svg {
-    margin-right: 7px;
+  span {
+    margin-left: 7px;
+  }
+
+  div {
+    margin: 0 21px;
   }
 `;

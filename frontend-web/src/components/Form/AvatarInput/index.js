@@ -7,6 +7,7 @@ import { MdInsertPhoto } from 'react-icons/md';
 
 import api from '~/services/api';
 
+import colors from '~/styles/colors';
 import { Container, DefaultContent, Error } from './styles';
 
 export default function AvatarInput({ setErrorFor, isLoading, ...rest }) {
@@ -73,7 +74,7 @@ export default function AvatarInput({ setErrorFor, isLoading, ...rest }) {
         <img src={preview} alt="preview" />
       ) : (
         <DefaultContent>
-          <MdInsertPhoto size={40} color="#dddddd" />
+          <MdInsertPhoto size={40} color={colors.disabled} />
           <strong>Adicionar foto</strong>
         </DefaultContent>
       );
@@ -84,15 +85,6 @@ export default function AvatarInput({ setErrorFor, isLoading, ...rest }) {
   return (
     <Container>
       <label htmlFor="avatar">
-        {/* {preview ? (
-          <img src={preview} alt="preview" />
-        ) : (
-          <DefaultContent>
-            <MdInsertPhoto size={40} color="#dddddd" />
-            <strong>Adicionar foto</strong>
-          </DefaultContent>
-        )} */}
-
         <Isloading />
         <input
           type="file"

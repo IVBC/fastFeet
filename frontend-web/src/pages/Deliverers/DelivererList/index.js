@@ -11,6 +11,7 @@ import history from '~/services/history';
 import { AddButton } from '~/components/MenuButton';
 import SearchField from '~/components/Form/SearchField';
 
+import colors from '~/styles/colors';
 import {
   Container,
   InitialContent,
@@ -131,7 +132,7 @@ export default function DelivererList() {
                 type="bars"
                 height={36}
                 width={36}
-                color="#7d7b7b"
+                color={colors.fontLigh}
               />
             </LoadingContent>
           }

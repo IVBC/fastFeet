@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 
+import colors from '~/styles/colors';
+
 export const Wrapper = styled.div`
   height: 100%;
-  background: #7d40e7;
+  background: ${colors.primary};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -12,7 +14,7 @@ export const Content = styled.div`
   width: 100%;
   max-width: 360px;
   text-align: center;
-  background: #fff;
+  background: ${colors.second};
   border-radius: 4px;
   padding: 60px 30px;
   img {

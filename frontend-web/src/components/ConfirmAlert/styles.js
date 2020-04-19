@@ -4,7 +4,7 @@ import colors from '~/styles/colors';
 
 export const Card = styled.div`
   width: 100%;
-  max-width: 560px;
+  max-width: 520px;
   display: flex;
   flex-direction: column;
   background: ${colors.bg};
@@ -13,13 +13,13 @@ export const Card = styled.div`
   padding: 30px;
 
   p {
-    font-size: 18px;
-    margin-bottom: 20px;
+    font-size: 1.6rem;
+    margin-bottom: 18px;
     strong {
       color: ${colors.fontDark};
     }
   }
-  div {
+  > div {
     display: flex;
     justify-content: flex-end;
   }

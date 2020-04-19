@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import colors from '~/styles/colors';
+
 export const InputContent = styled.div`
   display: flex;
   flex-direction: column;
@@ -18,14 +20,18 @@ export const InputContent = styled.div`
 
     height: 45px;
     border-radius: 4px;
-    border: 1px solid #dddddd;
+    border: 1px solid ${colors.border};
     font-size: 16px;
-    color: #444;
+    color: ${colors.fontDark};
     padding-left: 15px;
   }
 
+  input:disabled {
+    background-color: #f5f5f5;
+  }
+
   span {
-    color: rgba(255, 0, 0, 0.7);
+    color: ${colors.red};
     align-self: flex-start;
     margin: 5px 0 0;
     font-weight: bold;

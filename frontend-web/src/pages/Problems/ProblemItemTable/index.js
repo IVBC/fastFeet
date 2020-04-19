@@ -7,16 +7,16 @@ import {
   MdDeleteForever,
   MdEventBusy,
 } from 'react-icons/md';
-
 import { confirmAlert } from 'react-confirm-alert';
-
 import { parseISO, format } from 'date-fns';
 import { toast } from 'react-toastify';
 
 import api from '~/services/api';
+
 import ConfirmAlert from '~/components/ConfirmAlert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
+import colors from '~/styles/colors';
 import {
   Container,
   FirstItem,
@@ -58,6 +58,7 @@ export default function ProblemItem({ problem, updateProblems }) {
       };
 
       confirmAlert({
+        // eslint-disable-next-line react/prop-types
         customUI: ({ onClose }) => {
           return (
             <ConfirmAlert
@@ -88,6 +89,7 @@ export default function ProblemItem({ problem, updateProblems }) {
       });
     } else {
       confirmAlert({
+        // eslint-disable-next-line react/prop-types
         customUI: ({ onClose }) => {
           return (
             <ConfirmAlert
@@ -140,7 +142,7 @@ export default function ProblemItem({ problem, updateProblems }) {
         <LastItem>
           <OptionsContainer>
             <Badge visible={visible} onClick={handleToggleVisible}>
-              <MdMoreHoriz color="#C6C6C6" size={25} />
+              <MdMoreHoriz color={colors.grey} size={25} />
             </Badge>
             <OptionsList visible={visible}>
               <Option>
@@ -150,7 +152,7 @@ export default function ProblemItem({ problem, updateProblems }) {
                     setModalOpen(true);
                   }}
                 >
-                  <MdRemoveRedEye color="#8E5BE8" size={16} />
+                  <MdRemoveRedEye color={colors.primary} size={16} />
                   <p>Visualizar</p>
                 </Button>
                 <Modal
@@ -168,7 +170,7 @@ export default function ProblemItem({ problem, updateProblems }) {
                       zIndex: 200,
                     },
                     content: {
-                      background: '#fff',
+                      background: colors.second,
                       width: '100%',
                       maxWidth: 450,
                       top: '50%',
@@ -193,7 +195,7 @@ export default function ProblemItem({ problem, updateProblems }) {
                     handleCancel();
                   }}
                 >
-                  <MdDeleteForever color="#DE3B3B" size={16} />
+                  <MdDeleteForever color={colors.red} size={16} />
                   <p>
                     {isCancel
                       ? 'Encomenda cancelada. + Detalhe'
@@ -210,7 +212,16 @@ export default function ProblemItem({ problem, updateProblems }) {
 }
 
 ProblemItem.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  problem: PropTypes.object.isRequired,
+  problem: PropTypes.shape({
+    id: PropTypes.number,
+    description: PropTypes.string,
+    delivery_id: PropTypes.number,
+    delivery: PropTypes.shape({
+      id: PropTypes.number,
+      product: PropTypes.string,
+      canceled_at: PropTypes.string,
+      status: PropTypes.string,
+    }),
+  }).isRequired,
   updateProblems: PropTypes.func.isRequired,
 };

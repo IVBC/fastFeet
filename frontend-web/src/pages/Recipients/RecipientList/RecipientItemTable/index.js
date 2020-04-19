@@ -16,6 +16,7 @@ import history from '~/services/history';
 import ConfirmAlert from '~/components/ConfirmAlert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
+import colors from '~/styles/colors';
 import {
   Container,
   FirstItem,
@@ -50,6 +51,7 @@ export default function RecipientItem({ recipient, updateRecipients }) {
     };
 
     confirmAlert({
+      // eslint-disable-next-line react/prop-types
       customUI: ({ onClose }) => {
         return (
           <ConfirmAlert
@@ -83,7 +85,9 @@ export default function RecipientItem({ recipient, updateRecipients }) {
   return (
     <Container>
       <td data-label="ID">
-        <FirstItem>#{recipient.id}</FirstItem>
+        <FirstItem>
+          #{(recipient.id < 10 ? '0' : null) + recipient.id}
+        </FirstItem>
       </td>
       <td data-label="Nome">
         <div>
@@ -101,7 +105,7 @@ export default function RecipientItem({ recipient, updateRecipients }) {
         <LastItem>
           <OptionsContainer>
             <Badge visible={visible} onClick={handleToggleVisible}>
-              <MdMoreHoriz color="#C6C6C6" size={25} />
+              <MdMoreHoriz color={colors.grey} size={25} />
             </Badge>
             <OptionsList visible={visible}>
               <Option>
@@ -110,7 +114,7 @@ export default function RecipientItem({ recipient, updateRecipients }) {
                     history.push(`/recipients/edit/${recipient.id}`);
                   }}
                 >
-                  <MdEdit color="#4D85EE" size={16} />
+                  <MdEdit color={colors.blue} size={16} />
                   <p>Editar</p>
                 </Button>
               </Option>
@@ -121,7 +125,7 @@ export default function RecipientItem({ recipient, updateRecipients }) {
                     handleDelete();
                   }}
                 >
-                  <MdDeleteForever color="#DE3B3B" size={16} />
+                  <MdDeleteForever color={colors.red} size={16} />
                   <p>Excluir</p>
                 </Button>
               </LastOption>
@@ -134,7 +138,13 @@ export default function RecipientItem({ recipient, updateRecipients }) {
 }
 
 RecipientItem.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  recipient: PropTypes.object.isRequired,
+  recipient: PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+    street: PropTypes.string,
+    number: PropTypes.string,
+    city: PropTypes.string,
+    state: PropTypes.string,
+  }).isRequired,
   updateRecipients: PropTypes.func.isRequired,
 };

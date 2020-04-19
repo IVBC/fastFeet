@@ -1,18 +1,20 @@
 import styled from 'styled-components';
 import { darken } from 'polished';
 
+import colors from '~/styles/colors';
+
 export const Container = styled.tr`
   td {
     div {
-      height: 57px;
+      height: 46px;
       overflow: hidden;
       text-overflow: ellipsis;
       line-height: 57px;
       font-size: 1.4rem;
       font-weight: 100;
-      background: #fff;
-      margin-bottom: 21px;
-      color: #666666;
+      background: ${colors.second};
+      margin-bottom: 16px;
+      color: ${colors.fontColor};
       display: flex;
       align-items: center;
       p {
@@ -26,7 +28,7 @@ export const Container = styled.tr`
 `;
 
 export const FirstItem = styled.div`
-  padding-left: 13px;
+  padding-left: 23px;
   height: 57px;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
@@ -35,9 +37,9 @@ export const FirstItem = styled.div`
 export const LastItem = styled.span`
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 21px;
-  background: #fff;
-  height: 57px;
+  margin-bottom: 16px;
+  background: ${colors.second};
+  height: 46px;
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
 `;
@@ -50,7 +52,7 @@ export const Button = styled.button`
   display: flex;
   flex: 1;
   &:hover {
-    background: ${darken(0.02, '#fff')};
+    background: ${darken(0.02, colors.second)};
   }
 `;
 
@@ -60,7 +62,7 @@ export const OptionsList = styled.span`
   width: 150px;
   left: calc(50% - 112px);
   top: 100%;
-  background: #fff;
+  background: ${colors.second};
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
   border-radius: 4px;
   padding-top: 15px;
@@ -74,14 +76,15 @@ export const OptionsList = styled.span`
     top: -13px;
     width: 0;
     height: 0;
-    color: #fff;
+    color: ${colors.second};
     text-shadow: 1px 0 0 rgba(0, 0, 0, 0.25);
   }
 `;
 
 export const Badge = styled.button`
-  padding: 14px 28px;
-  background: ${props => (props.visible ? darken(0.07, '#fff') : 'none')};
+  padding: 10px 28px;
+  background: ${props =>
+    props.visible ? darken(0.07, colors.second) : 'none'};
   border-radius: ${props => (props.visible ? `${10}px` : 'none')};
   border: 0;
   box-shadow: ${props =>
@@ -89,7 +92,7 @@ export const Badge = styled.button`
   position: relative;
   align-content: center;
   &:hover {
-    background: ${props => !props.visible && darken(0.02, '#fff')};
+    background: ${props => !props.visible && darken(0.02, colors.second)};
   }
 `;
 
@@ -107,7 +110,7 @@ export const Option = styled.span`
     font-size: 16px;
     margin-left: 14px;
     font-weight: lighter;
-    color: #999999;
+    color: ${colors.fontLigh};
     margin-bottom: 6px;
     margin-top: 6px;
   }
@@ -126,7 +129,7 @@ export const LastOption = styled.span`
     font-size: 16px;
     margin-left: 14px;
     font-weight: lighter;
-    color: #999999;
+    color: ${colors.fontLigh};
     margin-bottom: 6px;
     margin-top: 6px;
   }

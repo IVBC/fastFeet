@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import colors from '~/styles/colors';
 
 export const Container = styled.div`
   display: flex;
@@ -25,23 +26,26 @@ export const InitialContent = styled.div`
 
 export const Buttons = styled.div`
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: flex-end;
   button {
-    margin-left: 16px;
+    margin: 10px 10px;
   }
 `;
 
 export const FormContainer = styled.div`
   display: flex;
-  margin-top: 27px;
+  margin-top: 8px;
   justify-content: center;
-  background: #fff;
+  background: ${colors.second};
   border-radius: 4px;
   > form {
     flex: 1;
+    flex-wrap: wrap;
     margin-left: 15px;
     margin-bottom: 37px;
-    margin-top: 26px;
+    margin-top: 10px;
     padding-left: 16px;
     > span {
       display: flex;
@@ -53,6 +57,13 @@ export const FormContainer = styled.div`
     }
     > aside {
       display: flex;
+      flex: 1;
+      flex-wrap: wrap;
+      > div {
+        flex: 1;
+        min-width: 300px;
+        margin-top: 16px;
+      }
     }
   }
 `;

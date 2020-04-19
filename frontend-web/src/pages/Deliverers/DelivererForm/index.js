@@ -34,16 +34,6 @@ export default function DeliverymenForm() {
       const { data } = response;
       setDeliverymanData(data);
 
-      // ref.current.setData({
-      //   name: data.name,
-      //   email: data.email,
-      //   avatar: { id: data.avatar.id, url: data.avatar.url },
-      // });
-      // ref.current.setFieldValue('avatar', {
-      //   id: data.avatar.id,
-      //   url: data.avatar.url,
-      // });
-
       setLoading(false);
     }
     if (id) {
@@ -89,7 +79,6 @@ export default function DeliverymenForm() {
             error.message
           );
         });
-        // ref.current.setErrors(validationErrors);
       } else {
         toast.error(
           `Não foi possível ${id ? 'editar' : 'cadastrar'} o entregador.`

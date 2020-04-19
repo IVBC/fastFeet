@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MdCheck, MdClose, MdDeleteSweep } from 'react-icons/md';
+import { MdCheck, MdClose } from 'react-icons/md';
 
 import { Card, Header } from './styles';
 
 import colors from '~/styles/colors';
 
-import Button from '~/components/Button';
+import ButtonWithIcon from '~/components/MenuButton/_ButtonWithIcon';
 
 export default function ConfirmAlert({
   callback,
@@ -31,20 +31,17 @@ export default function ConfirmAlert({
       {showButtons && (
         <div>
           {!onlyConfirmButton && (
-            <Button
-              type="button"
-              onClick={onClose}
-              icon={MdClose}
-              text={cancelButtonText}
-              color={colors.grey}
+            <ButtonWithIcon
+              title={cancelButtonText}
+              Icon={MdClose}
+              action={onClose}
+              background={colors.grey}
             />
           )}
-
-          <Button
-            type="button"
-            text={confirmButtonText}
-            icon={MdCheck}
-            onClick={() => {
+          <ButtonWithIcon
+            title={confirmButtonText}
+            Icon={MdCheck}
+            action={() => {
               if (callback) callback();
 
               onClose();

@@ -12,6 +12,11 @@ export default createGlobalStyle`
     box-sizing: border-box;
   }
 
+  html {
+    /* a cada 1 rem é 10px */
+    font-size: 62.5%;
+  }
+
   *:focus {
     outline: 0;
   }
@@ -22,6 +27,7 @@ export default createGlobalStyle`
 
   body {
     -webkit-font-smoothing: antialiased;
+    font-size: 1.6rem;
   }
 
   body, input, button {

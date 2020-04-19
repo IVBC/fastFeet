@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 import { Form } from '@unform/web';
 import * as Yup from 'yup';
 import { toast } from 'react-toastify';
-// import PropTypes from 'prop-types';
 
 import history from '~/services/history';
 import api from '~/services/api';
@@ -22,7 +21,7 @@ import {
   Content,
 } from './styles';
 
-export default function OrderForm() {
+export default function DeliveryForm() {
   const { id } = useParams();
   const [orderData, setOrderData] = useState({});
   const ref = useRef(null);
@@ -34,10 +33,6 @@ export default function OrderForm() {
 
       setOrderData(data);
 
-      // setSelectedDeliveryman({
-      //   value: data.deliveryman.id,
-      //   label: data.deliveryman.name,
-      // });
       ref.current.setData(response.data);
       ref.current.setFieldValue('recipient_id', {
         value: response.data.recipient.id,
@@ -206,8 +201,6 @@ export default function OrderForm() {
                 noOptionsMessage={() => 'Nenhum entregador encontrado'}
                 loadOptions={loadDeliverymen}
                 styles={customStylesSelectInput}
-                // value={selectedDeliveryman}
-                // onChange={setSelectedDeliveryman}
               />
             </aside>
             <span>
@@ -227,11 +220,3 @@ export default function OrderForm() {
     </Container>
   );
 }
-
-// OrderForm.propTypes = {
-//   match: PropTypes.object,
-// };
-
-OrderForm.defaultProps = {
-  match: null,
-};

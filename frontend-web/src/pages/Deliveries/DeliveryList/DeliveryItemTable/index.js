@@ -20,6 +20,7 @@ import DefaultAvatar from '~/components/DefaultAvatar';
 import ConfirmAlert from '~/components/ConfirmAlert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
+import colors from '~/styles/colors';
 import {
   Container,
   FirstItem,
@@ -92,35 +93,18 @@ export default function OrderItem({ delivery, updateDeliveries }) {
   }
 
   async function handleDelete() {
-    // console.log('handleDelete');
-    // // eslint-disable-next-line no-alert
-    // const confirm = window.confirm('Você tem certeza que deseja excluir?');
-
-    // if (!confirm) {
-    //   return;
-    // }
-
-    // try {
-    //   await api.delete(`/deliveries/${delivery.id}`);
-    //   updateDeliveries();
-    //   toast.success('Encomenda excluida com sucesso!');
-    // } catch (err) {
-    //   console.log(err);
-    //   toast.error('Erro ao excluir encomenda!');
-    // }
     const deleteDelivery = async () => {
       try {
         await api.delete(`/deliveries/${delivery.id}`);
         updateDeliveries();
         toast.success(`Encomenda #${delivery.id} foi excluida com sucesso!`);
       } catch (err) {
-        console.log(err);
         toast.error('Erro ao excluir encomenda!');
       }
-      console.log('apagando');
     };
 
     confirmAlert({
+      // eslint-disable-next-line react/prop-types
       customUI: ({ onClose }) => {
         return (
           <ConfirmAlert
@@ -153,7 +137,7 @@ export default function OrderItem({ delivery, updateDeliveries }) {
   return (
     <Container statusColor={status.color} statusBackground={status.background}>
       <td data-label="ID">
-        <FirstItem>#{delivery.id}</FirstItem>
+        <FirstItem>#{(delivery.id < 10 ? '0' : null) + delivery.id}</FirstItem>
       </td>
       <td data-label="Destinatário">
         <div>
@@ -201,7 +185,7 @@ export default function OrderItem({ delivery, updateDeliveries }) {
         <LastItem>
           <OptionsContainer>
             <Badge visible={visible} onClick={handleToggleVisible}>
-              <MdMoreHoriz color="#C6C6C6" size={25} />
+              <MdMoreHoriz color={colors.grey} size={25} />
             </Badge>
             <OptionsList visible={visible}>
               <Option>
@@ -211,7 +195,7 @@ export default function OrderItem({ delivery, updateDeliveries }) {
                     setModalOpen(true);
                   }}
                 >
-                  <MdRemoveRedEye color="#8E5BE8" size={16} />
+                  <MdRemoveRedEye color={colors.primary} size={16} />
                   <p>Visualizar</p>
                 </Button>
 
@@ -230,7 +214,7 @@ export default function OrderItem({ delivery, updateDeliveries }) {
                       zIndex: 200,
                     },
                     content: {
-                      background: '#fff',
+                      background: colors.second,
                       width: '100%',
                       maxWidth: 450,
                       top: '50%',
@@ -251,7 +235,7 @@ export default function OrderItem({ delivery, updateDeliveries }) {
                       <span>
                         {delivery.recipient.city} - {delivery.recipient.state}
                       </span>
-                      <span>{delivery.recipient.cep}</span>
+                      <span>{delivery.recipient.zipcode}</span>
                     </div>
                     <aside>
                       <Title>Datas</Title>
@@ -284,7 +268,7 @@ export default function OrderItem({ delivery, updateDeliveries }) {
                     history.push(`/deliveries/edit/${delivery.id}`);
                   }}
                 >
-                  <MdEdit color="#4D85EE" size={16} />
+                  <MdEdit color={colors.blue} size={16} />
                   <p>Editar</p>
                 </Button>
               </Option>
@@ -295,7 +279,7 @@ export default function OrderItem({ delivery, updateDeliveries }) {
                     handleDelete();
                   }}
                 >
-                  <MdDeleteForever color="#DE3B3B" size={16} />
+                  <MdDeleteForever color={colors.red} size={16} />
                   <p>Excluir</p>
                 </Button>
               </LastOption>
@@ -309,5 +293,26 @@ export default function OrderItem({ delivery, updateDeliveries }) {
 
 OrderItem.propTypes = {
   updateDeliveries: PropTypes.func.isRequired,
-  delivery: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  delivery: PropTypes.shape({
+    id: PropTypes.number,
+    product: PropTypes.string,
+    start_date: PropTypes.string,
+    end_date: PropTypes.string,
+    canceled_at: PropTypes.string,
+    deliveryman: PropTypes.shape({
+      name: PropTypes.string,
+      avatar: PropTypes.shape({
+        url: PropTypes.string,
+      }),
+    }),
+    recipient: PropTypes.shape({
+      name: PropTypes.string,
+      street: PropTypes.string,
+      number: PropTypes.string,
+      city: PropTypes.string,
+      state: PropTypes.string,
+      zipcode: PropTypes.string,
+    }),
+    signature: PropTypes.shape({ url: PropTypes.string }),
+  }).isRequired,
 };

@@ -1,8 +1,10 @@
 import styled, { css } from 'styled-components';
 import { darken } from 'polished';
 
+import colors from '~/styles/colors';
+
 export const NavBar = styled.div`
-  border-left: 1px solid #ddd;
+  border-left: 1px solid ${colors.border};
   padding-left: 30px;
   height: 32px;
   display: flex;
@@ -11,9 +13,9 @@ export const NavBar = styled.div`
     margin-right: 20px;
     font-size: 1.6rem;
     font-weight: bold;
-    color: #999;
+    color: ${colors.fontLigh};
     &.active {
-      color: #444;
+      color: ${colors.fontDark};
     }
   }
   @media (max-width: 890px) {
@@ -23,7 +25,6 @@ export const NavBar = styled.div`
 
 export const Content = styled.div`
   height: 64px;
-  /* background-color: green; */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -44,17 +45,17 @@ export const Profile = styled.div`
 
   strong {
     text-align: right;
-    color: #666666;
+    color: ${colors.fontColor};
     margin-bottom: 5px;
   }
   button {
     background: none;
     border: none;
-    color: #de3b3b;
+    color: ${colors.red};
     text-align: end;
 
     &:hover {
-      color: ${darken(0.15, '#de3b3b')};
+      color: ${darken(0.15, colors.red)};
     }
   }
 
@@ -72,21 +73,21 @@ export const MenuToggle = styled.div`
   }
 `;
 export const MenuOne = styled.div`
-  background-color: #666666;
+  background-color: ${colors.fontColor};
   height: 5px;
   width: 100%;
   margin: 6px auto;
   transition-duration: 0.3s;
 `;
 export const MenuTwo = styled.div`
-  background-color: #666666;
+  background-color: ${colors.fontColor};
   height: 5px;
   width: 100%;
   margin: 6px auto;
   transition-duration: 0.3s;
 `;
 export const MenuThree = styled.div`
-  background-color: #666666;
+  background-color: ${colors.fontColor};
   height: 5px;
   width: 100%;
   margin: 6px auto;
@@ -94,8 +95,8 @@ export const MenuThree = styled.div`
 `;
 
 export const Container = styled.div`
-  background: #fff;
-  border: 1px solid #dddddd;
+  background: ${colors.second};
+  border: 1px solid ${colors.border};
   padding: 0 30px;
   ${({ on }) =>
     on &&
@@ -105,12 +106,12 @@ export const Container = styled.div`
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-color: #f5f5f5;
+      background-color: ${colors.bg};
       z-index: 10;
       & ${NavBar} {
         display: flex;
         flex-direction: column;
-        border-left: 0 solid #ddd;
+        border-left: 0 solid ${colors.border};
 
         /* background-color: red; */
 

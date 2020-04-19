@@ -12,7 +12,7 @@ export const Container = styled.div`
   background-color: transparent;
   > svg {
     font-size: 60px;
-    color: #999;
+    color: ${colors.fontLigh};
   }
 `;
 

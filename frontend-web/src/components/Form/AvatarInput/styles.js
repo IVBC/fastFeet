@@ -4,7 +4,6 @@ import colors from '~/styles/colors';
 
 export const Error = styled.span`
   color: ${colors.red};
-  color: rgba(255, 0, 0, 0.7);
   margin: 7px 0 0;
   font-weight: bold;
 `;
@@ -23,8 +22,8 @@ export const Container = styled.div`
       height: 150px;
       width: 150px;
       border-radius: 50%;
-      border: 3px solid rgba(255, 255, 255, 0.3);
-      background: #eee;
+      border: 3px solid ${colors.border};
+      background: ${colors.bg};
     }
     input {
       display: none;
@@ -43,9 +42,9 @@ export const DefaultContent = styled.div`
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  border: 1px dashed #dddddd;
+  border: 1px dashed ${colors.border};
   strong {
-    color: #dddddd;
+    color: ${colors.disabled};
   }
   &:hover {
     opacity: 0.8;

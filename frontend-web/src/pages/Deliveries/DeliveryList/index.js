@@ -11,6 +11,7 @@ import history from '~/services/history';
 import { AddButton } from '~/components/MenuButton';
 import SearchField from '~/components/Form/SearchField';
 
+import colors from '~/styles/colors';
 import {
   Container,
   InitialContent,
@@ -75,7 +76,6 @@ export default function DeliveryList() {
   }
 
   useEffect(() => {
-    console.log(deliveries.length, total);
     if (total && deliveries.length === total) {
       setHasMore(false);
     } else {
@@ -105,13 +105,11 @@ export default function DeliveryList() {
         setLoading(false);
       }
     }
-    console.log('loadDeliveries');
+
     loadDeliveries();
   }
 
   const onChange = useCallback(async event => {
-    console.log('onChange');
-
     setSearchValue(event.target.value);
   }, []);
 
@@ -137,7 +135,7 @@ export default function DeliveryList() {
                 type="bars"
                 height={36}
                 width={36}
-                color="#7d7b7b"
+                color={colors.fontLigh}
               />
             </LoadingContent>
           }

@@ -3,13 +3,15 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import ReactLoading from 'react-loading';
 import { toast } from 'react-toastify';
 import { MdMarkunreadMailbox } from 'react-icons/md';
-import LoadingLine from '~/components/LoadingLine';
 
 import api from '~/services/api';
 import history from '~/services/history';
 
 import { AddButton } from '~/components/MenuButton';
 import SearchField from '~/components/Form/SearchField';
+import RecipientItem from './RecipientItemTable';
+import ListEmptyMessage from '~/components/ListEmptyMessage';
+import LoadingLine from '~/components/LoadingLine';
 
 import {
   Container,
@@ -18,9 +20,7 @@ import {
   TableHead,
   LoadingContent,
 } from './styles';
-
-import RecipientItem from './RecipientItemTable';
-import ListEmptyMessage from '~/components/ListEmptyMessage';
+import colors from '~/styles/colors';
 
 export default function RecipientList() {
   const [recipients, setRecipients] = useState([]);
@@ -82,12 +82,6 @@ export default function RecipientList() {
   }, [recipients.length, total]);
 
   async function updateRecipients() {
-    // const response = await api.get('recipients');
-    // const {
-    //   data: { recipients: _recipients },
-    // } = response;
-
-    // setRecipients(_recipients);
     async function loadRecipients() {
       try {
         setLoading(true);
@@ -137,7 +131,7 @@ export default function RecipientList() {
                 type="bars"
                 height={36}
                 width={36}
-                color="#7d7b7b"
+                color={colors.fontLigh}
               />
             </LoadingContent>
           }

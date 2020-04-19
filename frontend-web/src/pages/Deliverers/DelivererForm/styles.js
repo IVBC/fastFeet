@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 
+import colors from '~/styles/colors';
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 27px;
-  margin-left: 270px;
-  margin-right: 270px;
+  padding: 40px 20px;
+  max-width: 1000px;
+  margin: auto;
 `;
 
 export const InitialContent = styled.div`
@@ -20,17 +22,19 @@ export const InitialContent = styled.div`
 
 export const Buttons = styled.div`
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: flex-end;
   button {
-    margin-left: 16px;
+    margin: 10px 10px;
   }
 `;
 
 export const FormContainer = styled.div`
   display: flex;
-  margin-top: 27px;
+  margin-top: 10px;
   justify-content: center;
-  background: #fff;
+  background: ${colors.second};
   border-radius: 4px;
   form {
     flex: 1;

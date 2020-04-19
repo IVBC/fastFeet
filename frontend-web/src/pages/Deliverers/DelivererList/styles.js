@@ -1,10 +1,9 @@
 import styled from 'styled-components';
+import colors from '~/styles/colors';
 
 export const Container = styled.div`
   display: flex;
-  /* margin: 34px 120px; */
   flex-direction: column;
-  /* justify-content: center; */
   padding: 40px 20px;
 `;
 
@@ -52,13 +51,10 @@ export const DeliveryListTable = styled.table`
 
   thead th {
     height: 30px;
-
-    /*text-align: left;*/
   }
 
   tbody {
     height: 60vh;
-    /* overflow-y: auto; */
     ::-webkit-scrollbar {
       width: 8px;
     }
@@ -75,7 +71,6 @@ export const DeliveryListTable = styled.table`
   }
 
   thead {
-    /* fallback */
   }
 
   tbody td,
@@ -84,12 +79,9 @@ export const DeliveryListTable = styled.table`
     float: left;
     :first-child {
       width: 14%;
-      /* min-width: 45px; */
     }
     :last-child {
       width: 9%;
-      /* text-align: center; */
-      /* min-width: 45px; */
     }
     :nth-child(2) {
       width: 17%;
@@ -138,7 +130,7 @@ export const DeliveryListTable = styled.table`
       height: 100%;
       display: flex;
       align-items: center;
-      background-color: #fff;
+      background-color: ${colors.second};
     }
 
     & td div {
@@ -149,19 +141,6 @@ export const DeliveryListTable = styled.table`
       margin-bottom: 0 !important;
     }
   }
-
-  // Large devices (desktops, 992px and up)
-  @media (max-width: 1199.98px) {
-    /* tbody td,
-    thead th {
-      :nth-child(3) {
-        width: 33%;
-      }
-      :nth-child(4) {
-        display: none;
-      }
-    } */
-  }
 `;
 
 export const TableHead = styled.tr`
@@ -170,12 +149,12 @@ export const TableHead = styled.tr`
     text-align: right;
   }
   th:first-child {
-    padding-left: 13px;
+    padding-left: 23px;
   }
   th {
     font-size: 16px;
     text-align: left;
-    color: #444;
+    color: ${colors.fontDark};
     padding-bottom: 14px;
   }
 `;
@@ -183,6 +162,6 @@ export const TableHead = styled.tr`
 export const LoadingContent = styled.div`
   display: flex;
   justify-content: center;
-  color: #7d7b7b;
+  color: ${colors.fontLigh};
   margin-top: 6px;
 `;

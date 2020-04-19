@@ -19,7 +19,6 @@ export const Container = styled.div`
     }
 
     &:placeholder-shown ~ .form__label {
-      /* font-size: 1.3rem; */
       cursor: text;
       top: 21px;
       padding-left: 16px;
@@ -42,7 +41,7 @@ export const Container = styled.div`
       top: -10px;
       display: block;
       transition: 0.2s;
-      font-size: 1rem;
+      font-size: 1.6rem;
       color: #757575;
       font-weight: 700;
       padding-left: 0px;
@@ -60,7 +59,7 @@ export const Container = styled.div`
     top: -10px;
     display: block;
     transition: 0.2s;
-    font-size: 1rem;
+    font-size: 1.6rem;
     color: #757575;
   }
 
