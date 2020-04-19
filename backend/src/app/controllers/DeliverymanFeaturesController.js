@@ -1,7 +1,6 @@
 import { Op } from 'sequelize';
 import * as Yup from 'yup';
 import {
-  parseISO,
   setHours,
   isWithinInterval,
   startOfHour,
@@ -32,7 +31,6 @@ class DeliverymanFeaturesController {
 
     const where = {
       deliveryman_id,
-      // canceled_at: null,
       end_date:
         filter === 'OPEN'
           ? null
@@ -60,6 +58,7 @@ class DeliverymanFeaturesController {
         {
           model: Recipient,
           as: 'recipient',
+          paranoid: false,
           attributes: ['name', 'street', 'number', 'city', 'state', 'zipcode'],
         },
       ],
@@ -105,6 +104,7 @@ class DeliverymanFeaturesController {
         {
           model: Recipient,
           as: 'recipient',
+          paranoid: false,
           attributes: [
             'id',
             'name',
@@ -120,6 +120,7 @@ class DeliverymanFeaturesController {
           model: Deliveryman,
           as: 'deliveryman',
           attributes: ['id', 'name', 'email'],
+          paranoid: false,
           include: [
             {
               model: File,
@@ -165,7 +166,6 @@ class DeliverymanFeaturesController {
       const deliveries = await Delivery.findAll({
         where: {
           deliveryman_id,
-          // canceled_at: null,
           end_date: null,
           start_date: {
             [Op.gte]: startOfToday(),

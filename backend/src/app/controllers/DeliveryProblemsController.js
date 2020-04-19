@@ -13,12 +13,14 @@ class DeliveryProblemsController {
       order: [['id', 'DESC']],
       limit: quantity,
       offset: (page - 1) * quantity,
+      include: [
+        {
+          model: Delivery,
+          as: 'delivery',
+          paranoid: false,
+        },
+      ],
     });
-    // fazer paginacao ?
-
-    // if (!deliveryProblems) {
-    //   return res.status(400).json({ error: 'Delivery problems not found.' });
-    // }
 
     return res.json({
       problems,

@@ -28,10 +28,6 @@ class RecipientController {
       ],
     });
 
-    // if (!recipients) {
-    //   return res.status(400).json({ error: 'Recipent does note exists.' });
-    // }
-
     return res.json({
       recipients,
       count,
@@ -66,12 +62,11 @@ class RecipientController {
   }
 
   async store(req, res) {
-    console.log(req.body);
     const schema = Yup.object().shape({
       name: Yup.string().required(),
       street: Yup.string().required(),
       number: Yup.string().required(),
-      complement: Yup.string().required(),
+      complement: Yup.string(),
       state: Yup.string().required(),
       city: Yup.string().required(),
       zipcode: Yup.string().required(),
@@ -153,6 +148,20 @@ class RecipientController {
       city,
       zipcode,
     });
+  }
+
+  async delete(req, res) {
+    const { id } = req.params;
+
+    const recipient = await Recipient.findByPk(id);
+
+    if (!recipient) {
+      return res.status(401).json({ error: 'recipient not exists.' });
+    }
+
+    await recipient.destroy({ where: { id } });
+
+    return res.status(200).json();
   }
 }
 

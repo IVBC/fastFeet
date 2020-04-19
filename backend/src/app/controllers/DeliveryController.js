@@ -28,6 +28,7 @@ class DeliveryController {
         {
           model: Recipient,
           as: 'recipient',
+          paranoid: false,
           attributes: [
             'id',
             'name',
@@ -43,6 +44,7 @@ class DeliveryController {
           model: Deliveryman,
           as: 'deliveryman',
           attributes: ['id', 'name', 'email'],
+          paranoid: false,
           include: [
             {
               model: File,
@@ -58,10 +60,6 @@ class DeliveryController {
         },
       ],
     });
-
-    // if (!deliveries.length) {
-    //   return res.status(401).json({ error: 'Deliveries not found' });
-    // }
 
     return res.json({
       deliveries,
@@ -82,6 +80,7 @@ class DeliveryController {
         {
           model: Recipient,
           as: 'recipient',
+          paranoid: false,
           attributes: [
             'id',
             'name',
@@ -97,6 +96,7 @@ class DeliveryController {
           model: Deliveryman,
           as: 'deliveryman',
           attributes: ['id', 'name', 'email'],
+          paranoid: false,
         },
         {
           model: File,
