@@ -83,16 +83,12 @@ export const OptionsList = styled.span`
 
 export const Badge = styled.button`
   padding: 10px 28px;
-  background: ${props =>
-    props.visible ? darken(0.07, colors.second) : 'none'};
-  border-radius: ${props => (props.visible ? `${10}px` : 'none')};
+  background: none;
   border: 0;
-  box-shadow: ${props =>
-    props.visible ? 'inset 0px 0px 2px 0px rgba(0,0,0,0.25)' : null};
   position: relative;
   align-content: center;
   &:hover {
-    background: ${props => !props.visible && darken(0.02, colors.second)};
+    background: ${darken(0.02, colors.second)};
   }
 `;
 

@@ -31,12 +31,7 @@ import {
 } from './styles';
 
 export default function ProblemItem({ problem, updateProblems }) {
-  const [visible, setVisible] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-
-  function handleToggleVisible() {
-    setVisible(!visible);
-  }
 
   const isCancel = useMemo(() => {
     if (problem.delivery.status === 'CANCELED') {
@@ -141,14 +136,13 @@ export default function ProblemItem({ problem, updateProblems }) {
       <td data-label="Ações">
         <LastItem>
           <OptionsContainer>
-            <Badge visible={visible} onClick={handleToggleVisible}>
+            <Badge>
               <MdMoreHoriz color={colors.grey} size={25} />
             </Badge>
-            <OptionsList visible={visible}>
+            <OptionsList>
               <Option>
                 <Button
                   onClick={() => {
-                    handleToggleVisible();
                     setModalOpen(true);
                   }}
                 >
@@ -191,7 +185,6 @@ export default function ProblemItem({ problem, updateProblems }) {
               <LastOption>
                 <Button
                   onClick={() => {
-                    handleToggleVisible();
                     handleCancel();
                   }}
                 >

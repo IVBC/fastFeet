@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   MdMoreHoriz,
@@ -30,12 +30,6 @@ import {
 } from './styles';
 
 export default function DeliverymanItem({ deliveryman, updateDeliverers }) {
-  const [visible, setVisible] = useState(false);
-
-  function handleToggleVisible() {
-    setVisible(!visible);
-  }
-
   async function handleDelete() {
     const deleteDelivery = async () => {
       try {
@@ -111,10 +105,10 @@ export default function DeliverymanItem({ deliveryman, updateDeliverers }) {
       <td data-label="Ações">
         <LastItem>
           <OptionsContainer>
-            <Badge visible={visible} onClick={handleToggleVisible}>
+            <Badge>
               <MdMoreHoriz color={colors.grey} size={25} />
             </Badge>
-            <OptionsList visible={visible}>
+            <OptionsList>
               <Option>
                 <Button
                   onClick={() => {
@@ -129,7 +123,6 @@ export default function DeliverymanItem({ deliveryman, updateDeliverers }) {
                 <Button
                   onClick={() => {
                     handleDelete();
-                    handleToggleVisible();
                   }}
                 >
                   <MdDeleteForever color={colors.red} size={16} />

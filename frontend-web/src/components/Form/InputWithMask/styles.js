@@ -29,12 +29,9 @@ export const Error = styled.span`
 `;
 
 export const ReactInputMask = styled(InputMask)`
-  /* background: ${colors.bg}; */
   border: 1px solid ${colors.border};
   border-radius: 4px;
   height: 45px;
   padding: 0 15px;
   color: ${colors.fontDark};
-  /* margin: 0 0 15px; */
-
 `;

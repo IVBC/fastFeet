@@ -37,7 +37,6 @@ import {
 } from './styles';
 
 export default function OrderItem({ delivery, updateDeliveries }) {
-  const [visible, setVisible] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [status, setStatus] = useState({});
   const [formatedDates, setFormatedDates] = useState({});
@@ -87,10 +86,6 @@ export default function OrderItem({ delivery, updateDeliveries }) {
     defineStatus();
     formatDates();
   }, [delivery]);
-
-  function handleToggleVisible() {
-    setVisible(!visible);
-  }
 
   async function handleDelete() {
     const deleteDelivery = async () => {
@@ -184,14 +179,13 @@ export default function OrderItem({ delivery, updateDeliveries }) {
       <td data-label="Ações">
         <LastItem>
           <OptionsContainer>
-            <Badge visible={visible} onClick={handleToggleVisible}>
+            <Badge>
               <MdMoreHoriz color={colors.grey} size={25} />
             </Badge>
-            <OptionsList visible={visible}>
+            <OptionsList>
               <Option>
                 <Button
                   onClick={() => {
-                    handleToggleVisible();
                     setModalOpen(true);
                   }}
                 >
@@ -275,7 +269,6 @@ export default function OrderItem({ delivery, updateDeliveries }) {
               <LastOption>
                 <Button
                   onClick={() => {
-                    handleToggleVisible();
                     handleDelete();
                   }}
                 >
