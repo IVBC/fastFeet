@@ -46,7 +46,9 @@ export default function ProblemItem({ problem, updateProblems }) {
         try {
           await api.delete(`/delivery/${problem.id}/cancel-delivery`);
           updateProblems();
-          toast.success(`Encomenda #${problem.id} foi cancelada com sucesso!`);
+          toast.success(
+            `Encomenda #${problem.delivery.id} foi cancelada com sucesso!`
+          );
         } catch (err) {
           toast.error('Erro ao cancelars encomenda!');
         }
