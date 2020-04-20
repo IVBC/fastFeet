@@ -22,7 +22,6 @@ function AsyncImage({ style, source, name, size }) {
           style={[
             style,
             {
-              // position: 'absolute',
               resizeMode: 'contain',
               display: !loaded ? 'none' : 'flex',
             },

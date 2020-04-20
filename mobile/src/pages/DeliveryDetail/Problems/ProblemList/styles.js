@@ -54,14 +54,4 @@ export const List = styled.FlatList.attrs({
   keyExtractor: (item) => item.id.toString(),
   onEndReachedThreshold: 0.2,
   showsVerticalScrollIndicator: false,
-  // removeClippedSubviews: true,
-  // initialNumToRender: 10,
-  // maxToRenderPerBatch: 100,
-})`
-  /* margin-bottom: 15px; */
-  /* border-width: 10px;
-  border-bottom-width: 0;
-  border-left-width: 0;
-  border-right-width: 0;
-  border-top-color: ${colors.border}; */
-`;
+})``;

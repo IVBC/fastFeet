@@ -9,11 +9,6 @@ export const Container = styled(RectButton)`
     disabled ? colors.fontTransparent : background};
   border-radius: 4px;
 
-  /* Dispositivos Maiores*/
-  /* padding: 12px;
-  width: 100%;
-  max-width: 540px; */
-
   align-items: center;
   justify-content: center;
 `;

@@ -17,7 +17,7 @@ export const Ball = styled.View`
   height: 10px;
   width: 10px;
   border-radius: 5px;
-  background: ${(props) => (props.marked ? colors.primary : '#fff')};
+  background: ${(props) => (props.marked ? colors.primary : colors.bg)};
   border: 1px solid ${colors.primary};
 `;
 
@@ -37,6 +37,6 @@ export const Descriptions = styled.View`
 export const Description = styled.Text`
   font-family: 'Roboto-Regular';
   font-size: 10px;
-  color: #999;
+  color: ${colors.fontLight};
   text-align: center;
 `;

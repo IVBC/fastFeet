@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Animated, TouchableWithoutFeedback } from 'react-native';
 
 import { Button, ContentButton, bgFill, TextError } from './styles';
-// import { Container } from './styles';
+
 const ACTION_TIMER = 3000;
 const COLORS = ['#7D40E7', '#F0EFEF'];
 
@@ -29,7 +29,6 @@ export default function PressButton({ children, onLongPress }) {
   }, [_value]);
 
   const handlePressIn = useCallback(() => {
-    // setTextComplete('');
     setError(true);
     Animated.timing(pressAction, {
       duration: ACTION_TIMER,
@@ -39,7 +38,6 @@ export default function PressButton({ children, onLongPress }) {
 
   const handlePressOut = useCallback(() => {
     Animated.timing(pressAction, {
-      // duration: _value * ACTION_TIMER,
       duration: 400,
       toValue: 0,
     }).start();

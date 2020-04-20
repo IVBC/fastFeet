@@ -4,7 +4,6 @@ import { Dimensions } from 'react-native';
 import colors from '~/styles/colors';
 
 const heightDevice = Dimensions.get('window').height;
-// const widhtDevice = Dimensions.get('window').width;
 
 export const Container = styled.SafeAreaView`
   background: ${colors.bg};
