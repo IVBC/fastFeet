@@ -29,7 +29,7 @@ Clone o repositorio:
 
 Acesse a pasta:
 
-> \$ cd FastFeet-Web
+> \$ cd fastFeet/frontend-web
 
 - É necessário ter yarn instalado
 
