@@ -9,6 +9,12 @@ import { signInSuccess, signFailure } from './actions';
 export function* signIn({ payload }) {
   try {
     const { id } = payload;
+
+    if (id === '') {
+      Alert.alert('Falha na autenticação', 'Informe o ID.');
+      yield put(signFailure());
+      return;
+    }
     const response = yield call(api.get, `/deliverers/${id}`);
 
     const { data: user } = response;
