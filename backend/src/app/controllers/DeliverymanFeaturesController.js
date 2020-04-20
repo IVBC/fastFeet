@@ -23,10 +23,16 @@ class DeliverymanFeaturesController {
         error: "The filter is invalid. Enter with 'OPEN' or 'DELIVERED'",
       });
     }
-    const deliveryman = await Deliveryman.findByPk(deliveryman_id);
+    const deliveryman = await Deliveryman.findByPk(deliveryman_id, {
+      paranoid: false,
+    });
 
     if (!deliveryman) {
       return res.status(400).json({ error: 'Delivery man not found' });
+    }
+
+    if (deliveryman.deletedAt) {
+      return res.status(401).json({ error: 'Delivery man fired' });
     }
 
     const where = {
@@ -151,17 +157,17 @@ class DeliverymanFeaturesController {
         .json({ error: 'Delivery man is not available, he was fired.' });
     }
     if (action === 'withdraw') {
-      if (
-        !isWithinInterval(new Date(), {
-          start: startOfHour(setHours(startOfToday(), 8)),
-          end: startOfHour(setHours(startOfToday(), 18)),
-        })
-      ) {
-        return res.status(400).json({
-          error:
-            'You can only pick up deliveries today between 8:00h and 18:00h',
-        });
-      }
+      // if (
+      //   !isWithinInterval(new Date(), {
+      //     start: startOfHour(setHours(startOfToday(), 8)),
+      //     end: startOfHour(setHours(startOfToday(), 18)),
+      //   })
+      // ) {
+      //   return res.status(400).json({
+      //     error:
+      //       'You can only pick up deliveries today between 8:00h and 18:00h',
+      //   });
+      // }
 
       const deliveries = await Delivery.findAll({
         where: {

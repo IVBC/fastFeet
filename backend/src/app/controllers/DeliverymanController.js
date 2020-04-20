@@ -27,10 +27,6 @@ class DeliverymanController {
       ],
     });
 
-    // if (!delivery_people) {
-    //   return res.status(401).json({ error: 'Deliveries not found.' });
-    // }
-
     return res.json({
       deliverers,
       count,
@@ -41,11 +37,14 @@ class DeliverymanController {
   async show(req, res) {
     const { id } = req.params;
 
+    console.log(id);
+
     const deliveryman = await Deliveryman.findOne({
       where: {
         id,
       },
-      attributes: ['id', 'name', 'email', 'createdAt'],
+      paranoid: false,
+      attributes: ['id', 'name', 'email', 'createdAt', 'deletedAt'],
       include: [
         {
           model: File,
@@ -57,6 +56,9 @@ class DeliverymanController {
 
     if (!deliveryman) {
       return res.status(400).json({ error: 'Delivery not exists.' });
+    }
+    if (deliveryman.deletedAt) {
+      return res.status(401).json({ error: 'Deliveryman fired' });
     }
 
     return res.json(deliveryman);
