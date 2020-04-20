@@ -68,7 +68,7 @@ export default function ConfirmDelivery() {
   const handleTakePicture = useCallback(async () => {
     const options = { quality: 0.5, base64: true };
     const data = await cameraRef.current.takePictureAsync(options);
-    console.log(data.uri);
+
     await setImageUri(data.uri);
   }, []);
 

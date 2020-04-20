@@ -1,6 +1,5 @@
 import React, { useEffect, useCallback, useState, useMemo, memo } from 'react';
-
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useIsFocused } from '@react-navigation/native';
 import { Alert } from 'react-native';
 import api from '~/services/api';
@@ -9,11 +8,13 @@ import ListItem from './ListItem';
 import Loading from '~/components/Loading';
 import EmptyListMessage from '~/components/ListEmptyMessage';
 
+import { signOut } from '~/store/modules/auth/actions';
 import Header from './Header';
 import { List } from './styles';
 
 function ListDelivery() {
   const { id } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const isFocused = useIsFocused();
 
   const [deliveries, setDeliveries] = useState([]);
@@ -48,11 +49,24 @@ function ListDelivery() {
 
       setTotal(count);
       setPage((prevPage) => prevPage + 1);
-    } catch (e) {
-      Alert.alert(
-        'Não foi possível carregar suas entregas !',
-        'Falha na comuniçao com o servidor. Por favor, tente novamente...'
-      );
+    } catch (err) {
+      if (err.response) {
+        const codeErro = err.response.status;
+        if (codeErro === 401) {
+          Alert.alert('Sentimos muito :(', 'Vocế está demitido.');
+          dispatch(signOut());
+        } else {
+          Alert.alert(
+            'Não foi possível carregar suas entregas !',
+            'Entregador não encontrado'
+          );
+        }
+      } else {
+        Alert.alert(
+          'Não foi possível carregar suas entregas !',
+          'Falha na comuniçao com o servidor. Por favor, tente novamente...'
+        );
+      }
     } finally {
       setLoading(false);
     }

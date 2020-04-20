@@ -13,15 +13,21 @@ export function* signIn({ payload }) {
 
     const { data: user } = response;
 
-    if (!user) {
-      Alert.alert('Erro no login', 'O ID é inválido.');
-      yield put(signFailure());
-      return;
-    }
-
     yield put(signInSuccess(id, user));
   } catch (err) {
-    Alert.alert('Falha na autenticação', 'ID invalido');
+    if (err.response) {
+      const codeErro = err.response.status;
+      if (codeErro === 401) {
+        Alert.alert('Sentimos muito :(', 'Vocế está demitido.');
+      } else {
+        Alert.alert('Falha na autenticação', 'O ID é inválido.');
+      }
+    } else {
+      Alert.alert(
+        'Falha na autenticação',
+        'Falha na comunicação com o servidor'
+      );
+    }
     yield put(signFailure());
   }
 }

@@ -27,7 +27,7 @@ export default function ProblemsForm() {
         const schema = Yup.object().shape({
           description: Yup.string()
             .required('A descrição é obrigatória.')
-            .max(200, 'No máximo 200 caracteres.'),
+            .max(1000, 'No máximo 1000 caracteres.'),
         });
         await schema.validate(data, {
           abortEarly: false,
