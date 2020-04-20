@@ -157,17 +157,17 @@ class DeliverymanFeaturesController {
         .json({ error: 'Delivery man is not available, he was fired.' });
     }
     if (action === 'withdraw') {
-      // if (
-      //   !isWithinInterval(new Date(), {
-      //     start: startOfHour(setHours(startOfToday(), 8)),
-      //     end: startOfHour(setHours(startOfToday(), 18)),
-      //   })
-      // ) {
-      //   return res.status(400).json({
-      //     error:
-      //       'You can only pick up deliveries today between 8:00h and 18:00h',
-      //   });
-      // }
+      if (
+        !isWithinInterval(new Date(), {
+          start: startOfHour(setHours(startOfToday(), 8)),
+          end: startOfHour(setHours(startOfToday(), 18)),
+        })
+      ) {
+        return res.status(400).json({
+          error:
+            'You can only pick up deliveries today between 8:00h and 18:00h',
+        });
+      }
 
       const deliveries = await Delivery.findAll({
         where: {
